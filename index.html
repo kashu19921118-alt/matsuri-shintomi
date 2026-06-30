@@ -15,8 +15,9 @@
   3. 搬入出スケジュール "XX月XX日（土）" / "XX月XX日（祝日）"
   4. 実行委員会 連絡先一覧（氏名・電話番号）
   5. 各担当割の人名・体制
-  6. images/ フォルダ内の図版（会場レイアウト・出店者配置・香盤表等）
-  7. 緊急連絡先（消防・警察番号）を毎年再確認
+  6. images/ フォルダ内の図版（会場レイアウト・出店者配置等）
+  7. kaban.pdf を最新の香盤表PDFに差し替え
+  8. 緊急連絡先（消防・警察番号）を毎年再確認
   =====================================
 -->
 <style>
@@ -39,7 +40,7 @@
   --amber: #92600a;
   --radius: 12px;
   --shadow: 0 1px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.07);
-  --header-h: 72px;        /* sticky header height — used for scroll offset */
+  --header-h: 72px;
 }
 
 /* ===== BASE ===== */
@@ -56,6 +57,16 @@ body {
   line-height: 1.75;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ===== PROGRESS BAR ===== */
+#prog {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0;
+  background: var(--accent);
+  z-index: 400;
+  transition: width .1s linear;
+  pointer-events: none;
 }
 
 /* ===== STICKY HEADER ===== */
@@ -90,6 +101,18 @@ header {
   margin-top: 1px;
 }
 
+/* Live clock */
+#clock {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent2);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
 /* Quick nav */
 .qnav {
   display: flex;
@@ -121,8 +144,9 @@ header {
   min-height: 32px;
 }
 .qnav a:hover, .qnav a:focus { background: rgba(255,255,255,.32); }
+.qnav a.active { background: var(--accent); }
 .qnav a.em { background: var(--red); }
-.qnav a.em:hover { background: #a93226; }
+.qnav a.em:hover, .qnav a.em.active { background: #a93226; }
 
 /* ===== MAIN LAYOUT ===== */
 main {
@@ -140,7 +164,7 @@ main {
   overflow: hidden;
 }
 
-.ch {                           /* card-head */
+.ch {
   background: var(--primary);
   color: #fff;
   padding: 11px 16px;
@@ -162,7 +186,7 @@ main {
   white-space: nowrap;
 }
 
-.cb { padding: 15px 16px; }     /* card-body */
+.cb { padding: 15px 16px; }
 
 /* ===== INFO ROWS ===== */
 .info-rows { display: grid; gap: 0; }
@@ -208,7 +232,6 @@ main {
 .box-tip   { background: #eafaf1; border: 1px solid #82e0aa; color: var(--green); }
 .box-danger{ background: #fdedec; border: 1px solid #f1948a; color: var(--red); }
 .box-danger strong { color: var(--red); }
-/* normal body text colour inside boxes */
 .box p, .box li, .box span { color: var(--text); }
 
 /* ===== COLLAPSIBLE ===== */
@@ -265,7 +288,6 @@ td {
 tr:last-child td { border-bottom: none; }
 tr:nth-child(even) td { background: #f7f8fb; }
 
-/* Tel link in table */
 a.tel {
   color: var(--primary);
   text-decoration: none;
@@ -302,7 +324,7 @@ a.tel:hover { color: var(--accent); }
   padding-left: 10px; border-left: 2px solid #ddd; line-height: 1.8;
 }
 
-/* ===== POSITION LIST (駐車場人員) ===== */
+/* ===== POSITION LIST ===== */
 .pl { display: grid; gap: 3px; margin-top: 8px; }
 .pl-item {
   display: flex; gap: 10px; align-items: flex-start;
@@ -345,6 +367,105 @@ ol.steps li::before {
   object-fit: contain;
 }
 
+/* Zoom cursor for clickable images */
+.img-zoom {
+  cursor: zoom-in;
+  transition: opacity .15s;
+}
+.img-zoom:hover { opacity: .92; }
+
+/* Image grids */
+.img-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 8px 0;
+}
+.img-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 8px 0;
+}
+.img-grid-2 .img-full,
+.img-grid-3 .img-full { margin: 0; }
+@media (max-width: 480px) {
+  .img-grid-3 { grid-template-columns: 1fr 1fr; }
+}
+
+figure.fig { margin: 0; }
+figcaption {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ===== PDF EMBED ===== */
+.pdf-open-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 10px;
+  margin: 12px 0 10px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s;
+}
+.pdf-open-btn:hover { background: var(--primary-dark); }
+.pdf-open-btn .pdf-icon { font-size: 20px; }
+
+.pdf-embed-wrap {
+  display: none; /* hidden on mobile */
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 8px 0;
+  background: #f5f5f5;
+}
+.pdf-embed-wrap iframe {
+  display: block;
+  width: 100%;
+  height: 680px;
+  border: none;
+}
+@media (min-width: 640px) {
+  .pdf-embed-wrap { display: block; }
+}
+
+/* ===== LIGHTBOX ===== */
+#lb-overlay {
+  position: fixed; inset: 0; z-index: 998;
+  background: rgba(0,0,0,.93);
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px;
+  cursor: zoom-out;
+  -webkit-tap-highlight-color: transparent;
+}
+#lb-overlay img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+#lb-close {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,255,255,.2);
+  border: none; color: #fff; font-size: 20px;
+  width: 40px; height: 40px; border-radius: 50%;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* ===== NOTE ===== */
 .note { font-size: 12px; color: var(--muted); }
 .note::before { content: '※ '; }
@@ -358,7 +479,10 @@ ol.steps li::before {
   font-size: 20px; text-decoration: none;
   box-shadow: 0 3px 10px rgba(0,0,0,.25);
   -webkit-tap-highlight-color: transparent;
+  opacity: 0; transition: opacity .2s;
+  pointer-events: none;
 }
+#top-btn.show { opacity: 1; pointer-events: auto; }
 
 /* ===== FOOTER ===== */
 footer {
@@ -370,7 +494,6 @@ footer {
 }
 
 /* ===== RESPONSIVE ===== */
-/* Tablet / Desktop */
 @media (min-width: 640px) {
   :root { --header-h: 78px; }
   body { font-size: 16px; }
@@ -381,36 +504,38 @@ footer {
   .qnav a { font-size: 13px; padding: 6px 15px; }
   .ch { font-size: 16px; padding: 13px 20px; }
   .slogan { font-size: 19px; }
-  .em-grid { grid-template-columns: 1fr 1fr; }
+  #clock { font-size: 22px; }
 }
 
 @media (min-width: 900px) {
   main { padding: 22px 24px 60px; }
 }
 
-/* Very small phones */
 @media (max-width: 360px) {
   .hd-title { font-size: 14px; }
   .qnav a { font-size: 11px; padding: 4px 9px; }
   .em-grid { grid-template-columns: 1fr; }
   .ch { font-size: 14px; }
   .em-n { font-size: 17px; }
+  #clock { font-size: 17px; }
+  .img-grid-2 { grid-template-columns: 1fr; }
 }
 
-/* Print */
 @media print {
   header { position: relative; box-shadow: none; }
-  .qnav, #top-btn { display: none; }
+  .qnav, #top-btn, #prog, #clock { display: none; }
   .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
   details { display: block; }
   details summary::after { display: none; }
   .det { display: block !important; }
   body { font-size: 12px; }
+  .pdf-open-btn { display: none; }
 }
 </style>
 </head>
 <body>
 
+<div id="prog"></div>
 <a href="#top" id="top-btn" aria-label="トップへ戻る">↑</a>
 
 <header id="top">
@@ -419,6 +544,7 @@ footer {
       まつりしんとみ スタッフ要項
       <small>【20XX年版】当日用マニュアル</small>
     </div>
+    <div id="clock">--:--</div>
   </div>
   <nav class="qnav" aria-label="セクションナビ">
     <a href="#s-overview">📋 概要</a>
@@ -730,9 +856,17 @@ footer {
     </div>
 
     <h3 style="margin:16px 0 6px;font-size:14px;color:var(--primary)">会場誘導図</h3>
-    <img src="images/image4.png" alt="会場誘導マップ" class="img-full" loading="lazy">
-    <img src="images/image5.png" alt="会場誘導マップ（北側）" class="img-full" loading="lazy">
-    <img src="images/image7.png" alt="会場誘導マップ（詳細）" class="img-full" loading="lazy">
+    <img src="images/image4.png" alt="会場全体 誘導マップ" class="img-full img-zoom" loading="lazy">
+    <div class="img-grid-2">
+      <figure class="fig">
+        <img src="images/image5.png" alt="北側エリア" class="img-full img-zoom" loading="lazy">
+        <figcaption>北側エリア</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image7.png" alt="誘導詳細図" class="img-full img-zoom" loading="lazy">
+        <figcaption>誘導詳細</figcaption>
+      </figure>
+    </div>
   </div>
 </div>
 
@@ -765,13 +899,26 @@ footer {
     </div>
 
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">全体レイアウト図</h3>
-    <img src="images/image12.png" alt="全体レイアウト図" class="img-full" loading="lazy">
+    <img src="images/image12.png" alt="全体レイアウト図" class="img-full img-zoom" loading="lazy">
 
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">駐車場・警備員配置図</h3>
-    <img src="images/image14.png" alt="駐車場・警備員配置図" class="img-full" loading="lazy">
-    <img src="images/image9.jpeg" alt="駐車場補足図" class="img-full" loading="lazy">
-    <img src="images/image10.jpeg" alt="駐車場補足図2" class="img-full" loading="lazy">
-    <img src="images/image11.jpeg" alt="駐車場補足図3" class="img-full" loading="lazy">
+    <img src="images/image14.png" alt="駐車場・警備員配置図" class="img-full img-zoom" loading="lazy">
+
+    <h3 style="margin:10px 0 6px;font-size:13px;color:var(--muted)">補足図</h3>
+    <div class="img-grid-3">
+      <figure class="fig">
+        <img src="images/image9.jpeg" alt="補足①" class="img-full img-zoom" loading="lazy">
+        <figcaption>補足①</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image10.jpeg" alt="補足②" class="img-full img-zoom" loading="lazy">
+        <figcaption>補足②</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image11.jpeg" alt="補足③" class="img-full img-zoom" loading="lazy">
+        <figcaption>補足③</figcaption>
+      </figure>
+    </div>
   </div>
 </div>
 
@@ -787,8 +934,16 @@ footer {
     <summary>出店者配置図</summary>
     <div class="det">
       <p class="note" style="margin-bottom:8px">ステージ起点に西側・東側で区分</p>
-      <img src="images/image15.png" alt="出店者配置図（西側）" class="img-full" loading="lazy">
-      <img src="images/image16.png" alt="出店者配置図（東側）" class="img-full" loading="lazy">
+      <div class="img-grid-2">
+        <figure class="fig">
+          <img src="images/image15.png" alt="出店者配置図（西側）" class="img-full img-zoom" loading="lazy">
+          <figcaption>西側エリア</figcaption>
+        </figure>
+        <figure class="fig">
+          <img src="images/image16.png" alt="出店者配置図（東側）" class="img-full img-zoom" loading="lazy">
+          <figcaption>東側エリア</figcaption>
+        </figure>
+      </div>
     </div>
   </details>
 
@@ -799,7 +954,7 @@ footer {
         飲食・雑貨・ワークショップ → 事前割り振り<br>
         キッチンカー → 先着順に奥から誘導（K1、K2…）
       </div>
-      <img src="images/image17.png" alt="出店者一覧" class="img-full" loading="lazy">
+      <img src="images/image17.png" alt="出店者一覧" class="img-full img-zoom" loading="lazy">
     </div>
   </details>
 
@@ -886,7 +1041,7 @@ footer {
       <div class="box box-info" style="font-size:13px;margin-bottom:8px">
         コーン（生涯学習課）… 20個、各種サイン
       </div>
-      <img src="images/image18.png" alt="関係者駐車場割り振り" class="img-full" loading="lazy">
+      <img src="images/image18.png" alt="関係者駐車場割り振り" class="img-full img-zoom" loading="lazy">
     </div>
   </details>
 </div>
@@ -934,7 +1089,7 @@ footer {
     </div>
 
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">緊急連絡・救護位置図</h3>
-    <img src="images/image19.png" alt="緊急連絡・救護位置図" class="img-full" loading="lazy">
+    <img src="images/image19.png" alt="緊急連絡・救護位置図" class="img-full img-zoom" loading="lazy">
   </div>
 </div>
 
@@ -946,10 +1101,22 @@ footer {
     <span class="ch-tag">毎年更新</span>
   </div>
   <div class="cb">
-    <p class="note" style="margin-bottom:10px">臨機応変に対応すること</p>
-    <img src="images/image20.png" alt="香盤表" class="img-full" loading="lazy">
-    <img src="images/image21.png" alt="香盤表（続き）" class="img-full" loading="lazy">
-    <img src="images/image22.png" alt="香盤表（続き2）" class="img-full" loading="lazy">
+    <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
+
+    <!-- PDF open button (works on all devices) -->
+    <a href="kaban.pdf" class="pdf-open-btn" target="_blank">
+      <span class="pdf-icon">📄</span>
+      <span>香盤表 PDF を開く（別タブ）</span>
+    </a>
+
+    <!-- PDF inline preview (desktop only) -->
+    <div class="pdf-embed-wrap">
+      <iframe src="kaban.pdf" title="香盤表プレビュー" loading="lazy"></iframe>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">
+      毎年 kaban.pdf を最新の香盤表PDFファイルに差し替えてください
+    </p>
   </div>
 </div>
 
@@ -961,11 +1128,28 @@ footer {
     <span class="ch-tag">使用演目に応じて更新・削除可</span>
   </div>
   <div class="cb">
-    <img src="images/image23.jpg" alt="柔道技1" class="img-full" loading="lazy">
-    <img src="images/image24.png" alt="柔道技2" class="img-full" loading="lazy">
-    <img src="images/image25.png" alt="柔道技3" class="img-full" loading="lazy">
-    <img src="images/image26.jpeg" alt="柔道技4" class="img-full" loading="lazy">
-    <img src="images/image27.jpeg" alt="柔道技5" class="img-full" loading="lazy">
+    <div class="img-grid-2">
+      <figure class="fig">
+        <img src="images/image23.jpg" alt="柔道技①" class="img-full img-zoom" loading="lazy">
+        <figcaption>技①</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image24.png" alt="柔道技②" class="img-full img-zoom" loading="lazy">
+        <figcaption>技②</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image25.png" alt="柔道技③" class="img-full img-zoom" loading="lazy">
+        <figcaption>技③</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image26.jpeg" alt="柔道技④" class="img-full img-zoom" loading="lazy">
+        <figcaption>技④</figcaption>
+      </figure>
+      <figure class="fig">
+        <img src="images/image27.jpeg" alt="柔道技⑤" class="img-full img-zoom" loading="lazy">
+        <figcaption>技⑤</figcaption>
+      </figure>
+    </div>
   </div>
 </div>
 
@@ -975,6 +1159,106 @@ footer {
   まつりしんとみ実行委員会 — スタッフ要項テンプレート<br>
   <small>配布前に年度・日付・担当者・連絡先を必ず更新してください。</small>
 </footer>
+
+<!-- Lightbox overlay (created by JS) -->
+
+<script>
+// ---- Live clock ----
+(function(){
+  var el = document.getElementById('clock');
+  function tick(){
+    var n = new Date();
+    var h = ('0'+n.getHours()).slice(-2);
+    var m = ('0'+n.getMinutes()).slice(-2);
+    el.textContent = h + ':' + m;
+  }
+  tick();
+  setInterval(tick, 10000);
+})();
+
+// ---- Scroll progress bar ----
+(function(){
+  var prog = document.getElementById('prog');
+  var btn  = document.getElementById('top-btn');
+  function onScroll(){
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    if(max <= 0) return;
+    prog.style.width = Math.min(window.scrollY / max * 100, 100) + '%';
+    if(window.scrollY > 300){
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive: true});
+})();
+
+// ---- Active nav highlight (IntersectionObserver) ----
+(function(){
+  var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-emergency'];
+  var links = {};
+  document.querySelectorAll('.qnav a').forEach(function(a){
+    var m = a.getAttribute('href').match(/^#(.+)/);
+    if(m) links[m[1]] = a;
+  });
+  if(!window.IntersectionObserver) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+        var a = links[e.target.id];
+        if(a){
+          a.classList.add('active');
+          a.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+        }
+      }
+    });
+  }, {rootMargin: '-10% 0px -80% 0px'});
+  ids.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) obs.observe(el);
+  });
+})();
+
+// ---- Image lightbox ----
+(function(){
+  var overlay = null;
+
+  function openLb(src, alt){
+    if(overlay) return;
+    overlay = document.createElement('div');
+    overlay.id = 'lb-overlay';
+
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = alt || '';
+
+    var btn = document.createElement('button');
+    btn.id = 'lb-close';
+    btn.textContent = '✕';
+    btn.setAttribute('aria-label','閉じる');
+
+    overlay.appendChild(img);
+    overlay.appendChild(btn);
+    document.body.appendChild(overlay);
+
+    function close(e){
+      if(e && e.target === img) return; // don't close when clicking image itself
+      if(overlay){ overlay.remove(); overlay = null; }
+    }
+
+    overlay.addEventListener('click', close);
+    btn.addEventListener('click', function(e){ e.stopPropagation(); if(overlay){ overlay.remove(); overlay = null; } });
+    document.addEventListener('keydown', function esc(e){
+      if(e.key === 'Escape'){ if(overlay){ overlay.remove(); overlay = null; } document.removeEventListener('keydown', esc); }
+    });
+  }
+
+  document.querySelectorAll('.img-zoom').forEach(function(img){
+    img.addEventListener('click', function(){ openLb(this.src, this.alt); });
+  });
+})();
+</script>
 
 </body>
 </html>
