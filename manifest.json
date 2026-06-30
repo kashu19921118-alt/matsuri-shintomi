@@ -1,0 +1,11 @@
+{
+  "name": "まつりしんとみ スタッフ要項",
+  "short_name": "まつりマニュアル",
+  "description": "まつりしんとみ スタッフ用当日マニュアル",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef0f4",
+  "theme_color": "#1a3a5c",
+  "lang": "ja"
+}
