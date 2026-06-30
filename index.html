@@ -45,6 +45,7 @@
 
 /* ===== BASE ===== */
 html {
+  scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 8px);
   -webkit-text-size-adjust: 100%;
 }
@@ -77,6 +78,7 @@ header {
   background: var(--primary);
   padding: env(safe-area-inset-top, 0) 0 0;
   box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  will-change: transform;
 }
 
 .hd-inner {
@@ -726,7 +728,7 @@ footer {
         <div class="tl-s">
           ・机3・景品用意、ステージ前ロープで仕切る・キッズエリア確保<br>
           ・倉永（MC）、ステージ上補佐3〜4人、下2〜3人<br>
-          ・上位3名：商品券1500円・1000円・500円（計2,000円分）<br>
+          ・上位3名：商品券1500円・1000円・500円（計3,000円分）<br>
           ・換金 / 高鍋高ラグビー告知
         </div>
       </div>
@@ -777,7 +779,8 @@ footer {
     <span class="ch-label">商品券について</span>
   </div>
   <div class="cb">
-    <p>各プログラムで入賞した来場者に <strong>500円分の商品券</strong>を配布（当日のみ使用可）。</p>
+    <p>各プログラムの賞品として商品券を配布（当日のみ使用可）。金額はプログラムにより異なる（500円〜1,500円）。</p>
+    <img src="images/image4.png" alt="商品券（500円）サンプル" class="img-full img-zoom" loading="lazy" style="max-width:280px;display:block;margin:12px auto;">
     <div class="box box-warn" style="margin-top:10px">
       <strong>換金</strong>
       <p>イベント終了後 <strong>17:00 まで</strong>に運営本部にて換金。<strong>必ず釣り銭を用意しておくこと。</strong></p>
@@ -855,8 +858,10 @@ footer {
       ● 東・青年部1〜2人・役場4人 → 8時半ごろまで</p>
     </div>
 
+    <h3 style="margin:16px 0 6px;font-size:14px;color:var(--primary)">搬入図</h3>
+    <img src="images/hainyuzu.png" alt="搬入図" class="img-full img-zoom" loading="lazy">
+
     <h3 style="margin:16px 0 6px;font-size:14px;color:var(--primary)">会場誘導図</h3>
-    <img src="images/image4.png" alt="会場全体 誘導マップ" class="img-full img-zoom" loading="lazy">
     <div class="img-grid-2">
       <figure class="fig">
         <img src="images/image5.png" alt="北側エリア" class="img-full img-zoom" loading="lazy">
@@ -1046,7 +1051,34 @@ footer {
   </details>
 </div>
 
-<!-- ★ 10. 緊急時対応 -->
+<!-- ★ 10. 香盤表 -->
+<div class="card" id="s-cue">
+  <div class="ch">
+    <span class="ch-icon">📅</span>
+    <span class="ch-label">香盤表（タイムスケジュール）</span>
+    <span class="ch-tag">毎年更新</span>
+  </div>
+  <div class="cb">
+    <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
+
+    <!-- PDF open button (works on all devices) -->
+    <a href="kaban.pdf" class="pdf-open-btn" target="_blank">
+      <span class="pdf-icon">📄</span>
+      <span>香盤表 PDF を開く（別タブ）</span>
+    </a>
+
+    <!-- PDF inline preview (desktop only) -->
+    <div class="pdf-embed-wrap">
+      <iframe src="kaban.pdf" title="香盤表プレビュー" loading="lazy"></iframe>
+    </div>
+
+    <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">
+      毎年 kaban.pdf を最新の香盤表PDFファイルに差し替えてください
+    </p>
+  </div>
+</div>
+
+<!-- ★ 11. 緊急時対応 -->
 <div class="card" id="s-emergency">
   <div class="ch red">
     <span class="ch-icon">🚨</span>
@@ -1090,33 +1122,6 @@ footer {
 
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">緊急連絡・救護位置図</h3>
     <img src="images/image19.png" alt="緊急連絡・救護位置図" class="img-full img-zoom" loading="lazy">
-  </div>
-</div>
-
-<!-- ★ 11. 香盤表 -->
-<div class="card" id="s-cue">
-  <div class="ch">
-    <span class="ch-icon">📅</span>
-    <span class="ch-label">香盤表（タイムスケジュール）</span>
-    <span class="ch-tag">毎年更新</span>
-  </div>
-  <div class="cb">
-    <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
-
-    <!-- PDF open button (works on all devices) -->
-    <a href="kaban.pdf" class="pdf-open-btn" target="_blank">
-      <span class="pdf-icon">📄</span>
-      <span>香盤表 PDF を開く（別タブ）</span>
-    </a>
-
-    <!-- PDF inline preview (desktop only) -->
-    <div class="pdf-embed-wrap">
-      <iframe src="kaban.pdf" title="香盤表プレビュー" loading="lazy"></iframe>
-    </div>
-
-    <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">
-      毎年 kaban.pdf を最新の香盤表PDFファイルに差し替えてください
-    </p>
   </div>
 </div>
 
@@ -1164,6 +1169,7 @@ footer {
 // ---- Active nav highlight (IntersectionObserver) ----
 (function(){
   var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-emergency'];
+  // 順序はナビゲーションおよびHTML内セクション順に一致させること
   var links = {};
   document.querySelectorAll('.qnav a').forEach(function(a){
     var m = a.getAttribute('href').match(/^#(.+)/);
@@ -1177,7 +1183,7 @@ footer {
         var a = links[e.target.id];
         if(a){
           a.classList.add('active');
-          a.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+          a.scrollIntoView({behavior:'auto', block:'nearest', inline:'center'});
         }
       }
     });
