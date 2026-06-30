@@ -578,9 +578,68 @@ footer {
   display: none;
 }
 
+/* ===== COUNTDOWN BAR ===== */
+#cd-bar {
+  text-align: center;
+  padding: 0 16px 7px;
+  font-size: 12px;
+  color: rgba(255,255,255,.72);
+  letter-spacing: .2px;
+  min-height: 1px;
+}
+#cd-bar strong {
+  color: var(--accent2);
+  font-weight: 700;
+  font-size: 13.5px;
+}
+#cd-bar.event-day {
+  color: var(--accent2);
+  font-weight: 700;
+  font-size: 13px;
+  padding-bottom: 9px;
+}
+
+/* ===== CHECKLIST ===== */
+.checklist { display: grid; gap: 0; margin-bottom: 12px; }
+.cl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1.55;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s;
+}
+.cl-item:last-child { border-bottom: none; }
+.cl-item input[type="checkbox"] {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.cl-item.done { color: var(--muted); text-decoration: line-through; }
+.cl-note { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.cl-reset-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s;
+}
+.cl-reset-btn:hover { background: var(--bg); }
+
 @media print {
   header { position: relative; box-shadow: none; }
-  .qnav, #top-btn, #prog, #clock, #search-bar, .search-toggle { display: none; }
+  .qnav, #top-btn, #prog, #clock, #search-bar, .search-toggle, #cd-bar { display: none; }
   .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
   details { display: block; }
   details summary::after { display: none; }
@@ -604,6 +663,7 @@ footer {
     </div>
     <div id="clock">--:--</div>
   </div>
+  <div id="cd-bar" aria-live="polite"></div>
   <nav class="qnav" aria-label="セクションナビ">
     <a href="#s-overview">📋 概要</a>
     <a href="#s-roles">👥 担当割</a>
@@ -613,6 +673,7 @@ footer {
     <a href="#s-vendors">🏪 出店者</a>
     <a href="#s-contacts">📞 連絡先</a>
     <a href="#s-cue">📅 香盤表</a>
+    <a href="#s-checklist">✅ チェック</a>
     <a href="#s-emergency" class="em">🚨 緊急時</a>
     <button id="search-toggle-btn" class="search-toggle" aria-expanded="false" aria-label="検索">🔍 検索</button>
   </nav>
@@ -1159,6 +1220,34 @@ footer {
   </details>
 </div>
 
+<!-- ★ 10.5 当日チェックリスト -->
+<div class="card" id="s-checklist">
+  <div class="ch">
+    <span class="ch-icon">✅</span>
+    <span class="ch-label">当日チェックリスト</span>
+    <span class="ch-tag">準備確認</span>
+  </div>
+  <details>
+  <summary>スタッフ準備チェック</summary>
+  <div class="det">
+    <p class="cl-note">チェックした内容はリロードしても保持されます。全員分終わったらリセットしてください。</p>
+    <div class="checklist">
+      <label class="cl-item"><input type="checkbox" data-ck="badge"> スタッフ証・名札を着用した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="role"> 担当ポジション・エリアを確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="team"> 担当メンバーと顔合わせ済み</label>
+      <label class="cl-item"><input type="checkbox" data-ck="gear"> 備品・持ち物の確認完了</label>
+      <label class="cl-item"><input type="checkbox" data-ck="timeline"> タイムライン・プログラムを確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="layout"> 会場レイアウトを確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="vendor"> 出店者への案内事項を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="transport"> 搬入・搬出ルールを把握した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="emergency"> 緊急連絡先・対応手順を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="final"> 開場前の最終確認完了</label>
+    </div>
+    <button class="cl-reset-btn">リセット</button>
+  </div>
+  </details>
+</div>
+
 <!-- ★ 11. 緊急時対応 -->
 <div class="card" id="s-emergency">
   <div class="ch red">
@@ -1243,6 +1332,59 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
   setInterval(tick, 10000);
 })();
 
+// ---- Countdown to Nov 23 ----
+(function(){
+  var bar = document.getElementById('cd-bar');
+  if(!bar) return;
+
+  function getTarget(){
+    var now = new Date();
+    var yr = now.getFullYear();
+    var t = new Date(yr, 10, 23, 0, 0, 0); // Nov 23
+    // If today is already past Nov 23, aim for next year
+    if(now >= new Date(yr, 10, 24, 0, 0, 0)) t = new Date(yr + 1, 10, 23, 0, 0, 0);
+    return t;
+  }
+
+  var target = getTarget();
+  var interval;
+
+  function pad(n){ return ('0' + n).slice(-2); }
+
+  function update(){
+    var now = new Date();
+    var todayKey = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+    var eventKey = target.getFullYear() * 10000 + (target.getMonth() + 1) * 100 + target.getDate();
+
+    if(todayKey === eventKey){
+      bar.innerHTML = '🎉 <strong>本日開催！</strong> まつりしんとみ当日です';
+      bar.classList.add('event-day');
+      clearInterval(interval);
+      return;
+    }
+
+    var diff = target - now;
+    if(diff <= 0){ bar.innerHTML = ''; clearInterval(interval); return; }
+
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+
+    if(d >= 30){
+      bar.innerHTML = '🗓 開催まで <strong>' + d + '日</strong>';
+    } else if(d >= 1){
+      bar.innerHTML = '🗓 開催まで <strong>' + d + '日 ' + h + '時間</strong>';
+    } else {
+      bar.innerHTML = '⏰ 開催まで <strong>' + h + '時間 ' + pad(m) + '分 ' + pad(s) + '秒</strong>';
+    }
+  }
+
+  update();
+  interval = setInterval(update, 1000);
+  setTimeout(syncHeaderPad, 80);
+})();
+
 // ---- Scroll progress bar + back-to-top visibility ----
 (function(){
   var prog = document.getElementById('prog');
@@ -1267,7 +1409,7 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
 
 // ---- Active nav highlight (scroll-end debounce — NO DOM ops during scroll) ----
 (function(){
-  var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-emergency'];
+  var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-checklist','s-emergency'];
   var links = {};
   document.querySelectorAll('.qnav a').forEach(function(a){
     var m = a.getAttribute('href').match(/^#(.+)/);
@@ -1345,6 +1487,35 @@ if('serviceWorker' in navigator){
       }
     });
     if(none) none.style.display = (q && visible === 0) ? 'block' : 'none';
+  }
+})();
+
+// ---- Checklist (localStorage) ----
+(function(){
+  var PREFIX = 'matsuri_ck_';
+  var boxes = document.querySelectorAll('[data-ck]');
+
+  boxes.forEach(function(cb){
+    var key = PREFIX + cb.getAttribute('data-ck');
+    if(localStorage.getItem(key) === '1'){
+      cb.checked = true;
+      cb.closest('.cl-item').classList.add('done');
+    }
+    cb.addEventListener('change', function(){
+      localStorage.setItem(key, this.checked ? '1' : '0');
+      this.closest('.cl-item').classList.toggle('done', this.checked);
+    });
+  });
+
+  var resetBtn = document.querySelector('.cl-reset-btn');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      boxes.forEach(function(cb){
+        cb.checked = false;
+        cb.closest('.cl-item').classList.remove('done');
+        localStorage.removeItem(PREFIX + cb.getAttribute('data-ck'));
+      });
+    });
   }
 })();
 
