@@ -126,8 +126,7 @@ header {
   overflow-x: auto;
   padding: 8px 16px;
   scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: none;
 }
 .qnav::-webkit-scrollbar { display: none; }
 
@@ -682,7 +681,7 @@ footer {
     <span class="ch-label">開催概要</span>
     <span class="ch-tag">毎年更新</span>
   </div>
-  <details open>
+  <details>
   <summary>開催概要</summary>
   <div class="det">
     <div class="info-rows">
@@ -727,7 +726,7 @@ footer {
     <span class="ch-tag">毎年更新</span>
   </div>
 
-  <details open>
+  <details>
     <summary>準備期間の担当割（案）</summary>
     <div class="det">
       <div class="tw">
@@ -777,7 +776,7 @@ footer {
     <span class="ch-icon">🎭</span>
     <span class="ch-label">プログラム目安 &amp; 当日フロー</span>
   </div>
-  <details open>
+  <details>
   <summary>プログラム・当日フロー</summary>
   <div class="det">
     <div class="box box-info" style="margin-bottom:14px">
@@ -872,7 +871,7 @@ footer {
     <span class="ch-icon">🌧️</span>
     <span class="ch-label">開催変更・中止について</span>
   </div>
-  <details open>
+  <details>
   <summary>開催変更・中止について</summary>
   <div class="det">
     <div class="tw">
@@ -899,7 +898,7 @@ footer {
     <span class="ch-icon">🎫</span>
     <span class="ch-label">商品券について</span>
   </div>
-  <details open>
+  <details>
   <summary>商品券について</summary>
   <div class="det">
     <p>各プログラムの賞品として商品券を配布（当日のみ使用可）。金額はプログラムにより異なる（500円〜1,500円）。</p>
@@ -919,7 +918,7 @@ footer {
     <span class="ch-label">搬入出スケジュール &amp; 人員配置</span>
     <span class="ch-tag">毎年更新</span>
   </div>
-  <details open>
+  <details>
   <summary>スケジュール &amp; 人員配置</summary>
   <div class="det">
     <div class="tw">
@@ -1009,7 +1008,7 @@ footer {
     <span class="ch-label">全体レイアウト &amp; 駐車場配置</span>
     <span class="ch-tag">毎年確認</span>
   </div>
-  <details open>
+  <details>
   <summary>全体レイアウト &amp; 駐車場配置</summary>
   <div class="det">
     <div class="box box-info" style="font-size:13px;margin-bottom:12px">
@@ -1065,7 +1064,7 @@ footer {
     <span class="ch-tag">毎年更新（必須）</span>
   </div>
 
-  <details open>
+  <details>
     <summary>出店者配置図</summary>
     <div class="det">
       <p class="note" style="margin-bottom:8px">ステージ起点に西側・東側で区分</p>
@@ -1119,7 +1118,7 @@ footer {
     <span class="ch-tag">毎年更新（必須）</span>
   </div>
 
-  <details open>
+  <details>
     <summary>実行委員会 連絡先一覧</summary>
     <div class="det">
       <div class="tw">
@@ -1188,7 +1187,7 @@ footer {
     <span class="ch-label">香盤表（タイムスケジュール）</span>
     <span class="ch-tag">毎年更新</span>
   </div>
-  <details open>
+  <details>
   <summary>香盤表（タイムスケジュール）</summary>
   <div class="det">
     <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
@@ -1218,7 +1217,7 @@ footer {
     <span class="ch-label">緊急時対応</span>
     <span class="ch-tag">毎年番号再確認</span>
   </div>
-  <details open>
+  <details>
   <summary>緊急時対応</summary>
   <div class="det">
     <div class="em-grid">
@@ -1290,38 +1289,44 @@ footer {
 (function(){
   var prog = document.getElementById('prog');
   var btn  = document.getElementById('top-btn');
-  function onScroll(){
+  var ticking = false;
+  function update(){
     var max = document.documentElement.scrollHeight - window.innerHeight;
-    if(max <= 0) return;
-    prog.style.width = Math.min(window.scrollY / max * 100, 100) + '%';
-    if(window.scrollY > 300){
-      btn.classList.add('show');
-    } else {
-      btn.classList.remove('show');
-    }
+    if(max > 0) prog.style.width = Math.min(window.scrollY / max * 100, 100) + '%';
+    btn.classList.toggle('show', window.scrollY > 300);
+    ticking = false;
   }
-  window.addEventListener('scroll', onScroll, {passive: true});
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(update); }
+  }, {passive: true});
 })();
 
 // ---- Active nav highlight (IntersectionObserver) ----
 (function(){
   var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-emergency'];
-  // 順序はナビゲーションおよびHTML内セクション順に一致させること
   var links = {};
   document.querySelectorAll('.qnav a').forEach(function(a){
     var m = a.getAttribute('href').match(/^#(.+)/);
     if(m) links[m[1]] = a;
   });
   if(!window.IntersectionObserver) return;
+  var nav = document.querySelector('.qnav');
+
+  function centerNavItem(a){
+    if(!nav || !a) return;
+    requestAnimationFrame(function(){
+      var navW = nav.offsetWidth;
+      var aW   = a.offsetWidth;
+      nav.scrollLeft = a.offsetLeft - (navW - aW) / 2;
+    });
+  }
+
   var obs = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if(e.isIntersecting){
         Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
         var a = links[e.target.id];
-        if(a){
-          a.classList.add('active');
-          a.scrollIntoView({behavior:'auto', block:'nearest', inline:'center'});
-        }
+        if(a){ a.classList.add('active'); centerNavItem(a); }
       }
     });
   }, {rootMargin: '-10% 0px -80% 0px'});
