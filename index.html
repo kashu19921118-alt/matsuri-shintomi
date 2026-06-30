@@ -62,6 +62,7 @@ body {
   line-height: 1.75;
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
+  padding-top: var(--header-h);
 }
 
 /* ===== PROGRESS BAR ===== */
@@ -76,15 +77,16 @@ body {
   pointer-events: none;
 }
 
-/* ===== STICKY HEADER ===== */
+/* ===== FIXED HEADER ===== */
 header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 200;
   background: var(--primary);
   padding: env(safe-area-inset-top, 0) 0 0;
   box-shadow: 0 2px 12px rgba(0,0,0,.3);
-  will-change: transform;
 }
 
 .hd-inner {
@@ -169,6 +171,7 @@ main {
   box-shadow: var(--shadow);
   margin-bottom: 14px;
   overflow: hidden;
+  contain: layout style;
 }
 
 .ch {
@@ -1218,20 +1221,29 @@ footer {
 <!-- Lightbox overlay (created by JS) -->
 
 <script>
+// ---- Force all details closed (override iOS Safari session restore) ----
+document.querySelectorAll('details').forEach(function(d){ d.removeAttribute('open'); });
+
+// ---- Sync body padding with actual fixed header height ----
+function syncHeaderPad(){
+  var h = document.querySelector('header').offsetHeight;
+  document.documentElement.style.setProperty('--header-h', h + 'px');
+}
+syncHeaderPad();
+window.addEventListener('resize', syncHeaderPad, {passive: true});
+
 // ---- Live clock ----
 (function(){
   var el = document.getElementById('clock');
   function tick(){
     var n = new Date();
-    var h = ('0'+n.getHours()).slice(-2);
-    var m = ('0'+n.getMinutes()).slice(-2);
-    el.textContent = h + ':' + m;
+    el.textContent = ('0'+n.getHours()).slice(-2) + ':' + ('0'+n.getMinutes()).slice(-2);
   }
   tick();
   setInterval(tick, 10000);
 })();
 
-// ---- Scroll progress bar ----
+// ---- Scroll progress bar + back-to-top visibility ----
 (function(){
   var prog = document.getElementById('prog');
   var btn  = document.getElementById('top-btn');
@@ -1245,9 +1257,15 @@ footer {
   window.addEventListener('scroll', function(){
     if(!ticking){ ticking = true; requestAnimationFrame(update); }
   }, {passive: true});
+
+  // Back-to-top button: JS scroll instead of anchor (header is now fixed)
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
 })();
 
-// ---- Active nav highlight (IntersectionObserver) ----
+// ---- Active nav highlight (scroll-end debounce — NO DOM ops during scroll) ----
 (function(){
   var ids = ['s-overview','s-roles','s-program','s-transport','s-layout','s-vendors','s-contacts','s-cue','s-emergency'];
   var links = {};
@@ -1255,31 +1273,30 @@ footer {
     var m = a.getAttribute('href').match(/^#(.+)/);
     if(m) links[m[1]] = a;
   });
-  if(!window.IntersectionObserver) return;
   var nav = document.querySelector('.qnav');
 
-  function centerNavItem(a){
-    if(!nav || !a) return;
-    requestAnimationFrame(function(){
-      var navW = nav.offsetWidth;
-      var aW   = a.offsetWidth;
-      nav.scrollLeft = a.offsetLeft - (navW - aW) / 2;
-    });
+  function updateActive(){
+    var hh = document.querySelector('header').offsetHeight + 20;
+    var active = ids[0];
+    for(var i = 0; i < ids.length; i++){
+      var el = document.getElementById(ids[i]);
+      if(el && el.getBoundingClientRect().top <= hh) active = ids[i];
+    }
+    Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+    var a = links[active];
+    if(a){
+      a.classList.add('active');
+      if(nav) nav.scrollLeft = a.offsetLeft - (nav.offsetWidth - a.offsetWidth) / 2;
+    }
   }
 
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
-        var a = links[e.target.id];
-        if(a){ a.classList.add('active'); centerNavItem(a); }
-      }
-    });
-  }, {rootMargin: '-10% 0px -80% 0px'});
-  ids.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el) obs.observe(el);
-  });
+  var debounceTimer;
+  window.addEventListener('scroll', function(){
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(updateActive, 200);
+  }, {passive: true});
+
+  updateActive();
 })();
 
 // ---- Service Worker (PWA / offline) ----
@@ -1288,7 +1305,6 @@ if('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js', {scope: './'}).catch(function(){});
   });
 }
-
 
 // ---- Search ----
 (function(){
@@ -1304,6 +1320,7 @@ if('serviceWorker' in navigator){
     toggleBtn.setAttribute('aria-expanded', String(open));
     if(open){ setTimeout(function(){ input.focus(); }, 260); }
     else { input.value = ''; applySearch(''); }
+    setTimeout(syncHeaderPad, 280);
   });
 
   input.addEventListener('input', function(){
