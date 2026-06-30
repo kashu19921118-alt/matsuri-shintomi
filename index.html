@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a3a5c">
+<title>まつりしんとみ スタッフ要項 20XX年</title>
+<!--
+  =====================================
+  まつりしんとみ スタッフ要項テンプレート
+  =====================================
+  毎年更新が必要な箇所：
+  1. <title> と header の年度 "20XX"
+  2. 開催日時 "20XX年XX月XX日（X）" → 実際の日付
+  3. 搬入出スケジュール "XX月XX日（土）" / "XX月XX日（祝日）"
+  4. 実行委員会 連絡先一覧（氏名・電話番号）
+  5. 各担当割の人名・体制
+  6. images/ フォルダ内の図版（会場レイアウト・出店者配置・香盤表等）
+  7. 緊急連絡先（消防・警察番号）を毎年再確認
+  =====================================
+-->
+<style>
+/* ===== RESET & CUSTOM PROPERTIES ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #1a3a5c;
+  --primary-dark: #122845;
+  --accent: #e85d04;
+  --accent2: #f8a826;
+  --bg: #eef0f4;
+  --card: #ffffff;
+  --text: #1e1e1e;
+  --muted: #6b7280;
+  --border: #e0e4eb;
+  --red: #c0392b;
+  --blue: #1e6fa5;
+  --green: #1a7340;
+  --amber: #92600a;
+  --radius: 12px;
+  --shadow: 0 1px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.07);
+  --header-h: 72px;        /* sticky header height — used for scroll offset */
+}
+
+/* ===== BASE ===== */
+html {
+  scroll-padding-top: calc(var(--header-h) + 8px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3',
+               'Meiryo', 'メイリオ', 'Yu Gothic', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== STICKY HEADER ===== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--primary);
+  padding: env(safe-area-inset-top, 0) 0 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+
+.hd-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 0;
+}
+
+.hd-title {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  flex: 1;
+}
+.hd-title small {
+  display: block;
+  color: var(--accent2);
+  font-size: 11px;
+  font-weight: normal;
+  margin-top: 1px;
+}
+
+/* Quick nav */
+.qnav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 8px 16px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+.qnav::-webkit-scrollbar { display: none; }
+
+.qnav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  color: rgba(255,255,255,.9);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.18);
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s;
+  min-height: 32px;
+}
+.qnav a:hover, .qnav a:focus { background: rgba(255,255,255,.32); }
+.qnav a.em { background: var(--red); }
+.qnav a.em:hover { background: #a93226; }
+
+/* ===== MAIN LAYOUT ===== */
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 14px 12px 40px;
+}
+
+/* ===== CARD ===== */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.ch {                           /* card-head */
+  background: var(--primary);
+  color: #fff;
+  padding: 11px 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.ch.red { background: var(--red); }
+.ch-icon { font-size: 19px; flex-shrink: 0; }
+.ch-label { flex: 1; }
+.ch-tag {
+  background: rgba(255,255,255,.22);
+  border-radius: 10px;
+  padding: 2px 9px;
+  font-size: 10px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.cb { padding: 15px 16px; }     /* card-body */
+
+/* ===== INFO ROWS ===== */
+.info-rows { display: grid; gap: 0; }
+.ir {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.ir:last-child { border-bottom: none; }
+.ir-l { color: var(--muted); font-size: 12px; padding-top: 2px; }
+.ir-v { font-size: 15px; font-weight: 700; color: var(--primary); }
+.ir-note { font-size: 12px; font-weight: normal; color: var(--muted); display: block; margin-top: 1px; }
+
+/* ===== SLOGAN ===== */
+.slogan {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--primary);
+  text-align: center;
+  padding: 15px 12px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  margin: 13px 0;
+  line-height: 1.55;
+}
+
+/* ===== CALLOUT BOXES ===== */
+.box {
+  border-radius: 8px;
+  padding: 11px 13px;
+  margin: 10px 0;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.box strong { display: block; margin-bottom: 3px; font-size: 13.5px; }
+.box-warn  { background: #fef9e7; border: 1px solid #f39c12; color: var(--amber); }
+.box-warn strong { color: var(--amber); }
+.box-info  { background: #ebf5fb; border: 1px solid #85c1e9; color: var(--blue); }
+.box-info strong { color: var(--blue); }
+.box-tip   { background: #eafaf1; border: 1px solid #82e0aa; color: var(--green); }
+.box-danger{ background: #fdedec; border: 1px solid #f1948a; color: var(--red); }
+.box-danger strong { color: var(--red); }
+/* normal body text colour inside boxes */
+.box p, .box li, .box span { color: var(--text); }
+
+/* ===== COLLAPSIBLE ===== */
+details { border-top: 1px solid var(--border); }
+details:first-of-type { border-top: none; }
+
+summary {
+  list-style: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 48px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '▼';
+  font-size: 10px;
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+details[open] summary::after { transform: rotate(180deg); }
+.det { padding: 4px 16px 16px; }
+
+/* ===== TABLES ===== */
+.tw { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 6px; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+th {
+  background: var(--primary);
+  color: #fff;
+  padding: 9px 11px;
+  text-align: left;
+  white-space: nowrap;
+  font-size: 13px;
+}
+td {
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.65;
+}
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: #f7f8fb; }
+
+/* Tel link in table */
+a.tel {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+  min-height: 36px;
+}
+a.tel::before { content: '📞'; font-size: 12px; }
+a.tel:hover { color: var(--accent); }
+
+/* ===== TIMELINE ===== */
+.tl { position: relative; padding-left: 26px; }
+.tl::before {
+  content: '';
+  position: absolute; left: 9px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 14px; }
+.tl-item::before {
+  content: '';
+  position: absolute; left: -19px; top: 7px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: var(--accent); border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tl-t { font-size: 13.5px; font-weight: 700; color: var(--primary); }
+.tl-t.sub { color: var(--accent); }
+.tl-b { font-size: 13.5px; margin-top: 2px; }
+.tl-s {
+  font-size: 12.5px; color: var(--muted); margin-top: 5px;
+  padding-left: 10px; border-left: 2px solid #ddd; line-height: 1.8;
+}
+
+/* ===== POSITION LIST (駐車場人員) ===== */
+.pl { display: grid; gap: 3px; margin-top: 8px; }
+.pl-item {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13.5px; padding: 6px 0; border-bottom: 1px solid #f0f0f0;
+}
+.pl-item:last-child { border-bottom: none; }
+.pnum {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+
+/* ===== EMERGENCY NUMBERS ===== */
+.em-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0 4px; }
+.em-num {
+  background: var(--red); color: #fff;
+  border-radius: 10px; padding: 14px 10px; text-align: center;
+}
+.em-org { font-size: 11.5px; opacity: .9; line-height: 1.4; }
+.em-n { font-size: 20px; font-weight: 700; margin-top: 5px; }
+.em-n a { color: inherit; text-decoration: none; }
+
+/* ===== STEP LIST ===== */
+ol.steps { list-style: none; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+ol.steps li { counter-increment: s; display: flex; gap: 10px; align-items: flex-start; }
+ol.steps li::before {
+  content: counter(s);
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 26px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-size: 12px;
+  font-weight: 700; flex-shrink: 0; margin-top: 1px;
+}
+
+/* ===== IMAGES ===== */
+.img-full {
+  display: block; width: 100%; height: auto;
+  border-radius: 7px; border: 1px solid var(--border);
+  margin: 8px 0;
+  object-fit: contain;
+}
+
+/* ===== NOTE ===== */
+.note { font-size: 12px; color: var(--muted); }
+.note::before { content: '※ '; }
+
+/* ===== BACK TO TOP ===== */
+#top-btn {
+  position: fixed; bottom: 20px; right: 16px; z-index: 100;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; text-decoration: none;
+  box-shadow: 0 3px 10px rgba(0,0,0,.25);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center; padding: 20px 16px 30px;
+  color: #aaa; font-size: 11.5px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+}
+
+/* ===== RESPONSIVE ===== */
+/* Tablet / Desktop */
+@media (min-width: 640px) {
+  :root { --header-h: 78px; }
+  body { font-size: 16px; }
+  main { padding: 18px 20px 50px; }
+  .cb { padding: 18px 20px; }
+  .hd-title { font-size: 17px; }
+  .hd-title small { font-size: 12px; }
+  .qnav a { font-size: 13px; padding: 6px 15px; }
+  .ch { font-size: 16px; padding: 13px 20px; }
+  .slogan { font-size: 19px; }
+  .em-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 900px) {
+  main { padding: 22px 24px 60px; }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .hd-title { font-size: 14px; }
+  .qnav a { font-size: 11px; padding: 4px 9px; }
+  .em-grid { grid-template-columns: 1fr; }
+  .ch { font-size: 14px; }
+  .em-n { font-size: 17px; }
+}
+
+/* Print */
+@media print {
+  header { position: relative; box-shadow: none; }
+  .qnav, #top-btn { display: none; }
+  .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+  details { display: block; }
+  details summary::after { display: none; }
+  .det { display: block !important; }
+  body { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<a href="#top" id="top-btn" aria-label="トップへ戻る">↑</a>
+
+<header id="top">
+  <div class="hd-inner">
+    <div class="hd-title">
+      まつりしんとみ スタッフ要項
+      <small>【20XX年版】当日用マニュアル</small>
+    </div>
+  </div>
+  <nav class="qnav" aria-label="セクションナビ">
+    <a href="#s-overview">📋 概要</a>
+    <a href="#s-roles">👥 担当割</a>
+    <a href="#s-program">🎭 プログラム</a>
+    <a href="#s-transport">🚗 搬入出</a>
+    <a href="#s-layout">🗺 レイアウト</a>
+    <a href="#s-vendors">🏪 出店者</a>
+    <a href="#s-contacts">📞 連絡先</a>
+    <a href="#s-cue">📅 香盤表</a>
+    <a href="#s-emergency" class="em">🚨 緊急時</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ★ 1. 開催概要 -->
+<div class="card" id="s-overview">
+  <div class="ch">
+    <span class="ch-icon">📋</span>
+    <span class="ch-label">開催概要</span>
+    <span class="ch-tag">毎年更新</span>
+  </div>
+  <div class="cb">
+    <div class="info-rows">
+      <div class="ir">
+        <span class="ir-l">日時</span>
+        <span class="ir-v">20XX年 XX月XX日（X）<span class="ir-note">午前9時〜午後4時</span></span>
+      </div>
+      <div class="ir">
+        <span class="ir-l">場所</span>
+        <span class="ir-v">新富町総合文化公園 中央広場<span class="ir-note">新富町上富田 6374</span></span>
+      </div>
+      <div class="ir">
+        <span class="ir-l">主催</span>
+        <span class="ir-v">まつりしんとみ実行委員会</span>
+      </div>
+      <div class="ir">
+        <span class="ir-l">内容</span>
+        <span class="ir-v" style="font-weight:normal;font-size:14px;">きぐるみダンス・和太鼓演奏・なりきり選手権・せんぐまき等。飲食・雑貨・ワークショップ・キッチンカーも出店。</span>
+      </div>
+      <div class="ir">
+        <span class="ir-l">趣旨</span>
+        <span class="ir-v" style="font-weight:normal;font-size:14px;">関係人口増加を目的とした地域活性化のための祭り。対象：新富町民を主とした児湯地域住民。</span>
+      </div>
+    </div>
+
+    <div class="slogan">「子どもたちが帰ってきたくなる町へ」</div>
+
+    <div class="box box-warn">
+      <strong>◇ 抽選券について</strong>
+      <p>事前に全戸配布済み。当日の各プログラム景品等でも配布。<br>
+      <strong>当日は半券を切るよう適宜アナウンスすること。</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ★ 2. 担当割 -->
+<div class="card" id="s-roles">
+  <div class="ch">
+    <span class="ch-icon">👥</span>
+    <span class="ch-label">担当割</span>
+    <span class="ch-tag">毎年更新</span>
+  </div>
+
+  <details open>
+    <summary>準備期間の担当割（案）</summary>
+    <div class="det">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr><th>担当業務</th><th>担当者（◎＝主担当）</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>演目補助・部外補佐関連</td><td>稲田（学生ボラ）、徳山・斉田（青年部）</td></tr>
+            <tr><td>ボランティア統括</td><td>中山（撮影）、草野（取材）、東（動画・ドローン）<br><span class="note">要ボランティア</span></td></tr>
+            <tr><td>アテンド</td><td>有馬（前日駐車場・警備員・青年部）、有賀（各出演者・犬）、倉永（来賓）</td></tr>
+            <tr><td>駐車場・搬入出</td><td>◎中山（デザイン・発注）、渡邊（看板類）、川畑（サイン類）<br>◎稲田（XX年はふるまい補佐）</td></tr>
+            <tr><td>文書・資料作成</td><td>◎川畑（文書・要項）、稲田（文書）、中山（メール）、井崎（会場図）、有賀（台本）</td></tr>
+            <tr><td>広報物製作・広報</td><td>◎徳山・井崎・斉田・川畑<br><span class="note">要ボランティア → BOXへ</span></td></tr>
+            <tr><td>ステージ演目・出演者関係</td><td>◎倉永（来賓・基地）、緒方（演者）、有賀（犬猫）、稲田・草野<br><span class="note">いずれも立案兼務</span></td></tr>
+            <tr><td>一般出店者関連</td><td>◎緒方・中山（名簿）、川畑（説明会）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>当日担当割（案）</summary>
+    <div class="det">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr><th>担当業務</th><th>担当者（◎＝現場統括）</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>全体統括（官公対応含）</td><td>◎倉永</td></tr>
+            <tr><td>現場統括・運営全般</td><td>◎渡邊（現場統括）、中山（広報製作）、緒方（出店者）、川畑（運営全般）</td></tr>
+            <tr><td>本部・MC補佐</td><td>倉永、◎緒方、有賀、渡邊（防災救護兼）、稲田</td></tr>
+            <tr><td>協賛・ロゴ回収</td><td>◎倉永、東</td></tr>
+            <tr><td>なりきり選手権</td><td>●●・●●（企画立案）、●●・●●（SNS/募集）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ★ 3. プログラムフロー -->
+<div class="card" id="s-program">
+  <div class="ch">
+    <span class="ch-icon">🎭</span>
+    <span class="ch-label">プログラム目安 &amp; 当日フロー</span>
+  </div>
+  <div class="cb">
+    <div class="box box-info" style="margin-bottom:14px">
+      細部の動きは別紙「役割分担表」を確認すること。 ※ 臨機応変に対応。
+    </div>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-t">6:00</div>
+        <div class="tl-b">実行委・青年部 集合</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">7:00〜8:00</div>
+        <div class="tl-b">搬入</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">7:50</div>
+        <div class="tl-b">ボランティア集合 → 風船作業</div>
+        <div class="tl-s">担当：井崎・徳山・稲田 指示</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">8:00</div>
+        <div class="tl-b">司会集合 → 最終打ち合わせ（倉永・有賀）</div>
+        <div class="tl-s">※ 8時半までに搬入車両を退出</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">8:30</div>
+        <div class="tl-b">太鼓準備</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">8:45</div>
+        <div class="tl-b">ラムネ早飲み 受付開始（先着100人・整理券）</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">9:10</div>
+        <div class="tl-b">風船配布（目安300枚、様子を見て増減）</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t sub">▼ なりきり選手権</div>
+        <div class="tl-s">
+          ・来賓2名＋実行委員長の椅子用意<br>
+          ・審査員用机・椅子を舞台下にセット（A4用紙25枚、マジック7本、審査用紙）<br>
+          ・タイムキーパー1人 / 審査用紙回収2人 / 点数集計<br>
+          ・演者誘導 &amp; 参加賞の商品券渡し<br>
+          ・結果発表：倉永＋ステージ上補佐1、ステージ下補佐1
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t sub">▼ ラムネ早飲み</div>
+        <div class="tl-s">
+          6人×10レース（小学生以下8、中以上2）<br>
+          各レース1・2位 → 祭り商品券各500円（計10,000円分）<br>
+          ラムネ・机・シート・バケツ・水・雑巾・ごみ袋・養生テープ 準備
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t sub">▼ せんぐまき</div>
+        <div class="tl-s">
+          ・菓子準備<br>
+          ・マイク2本をそれぞれ引率役へ渡す<br>
+          ・テゲバ・ヴィアマ選手に撒いてもらう
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t sub">▼ 景品抽選</div>
+        <div class="tl-s">
+          ・机3・景品用意、ステージ前ロープで仕切る・キッズエリア確保<br>
+          ・倉永（MC）、ステージ上補佐3〜4人、下2〜3人<br>
+          ・上位3名：商品券1500円・1000円・500円（計2,000円分）<br>
+          ・換金 / 高鍋高ラグビー告知
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t sub">▼ おとみ・動物 入場</div>
+        <div class="tl-s">
+          犬＋引率・おとみ・猫＋引率 会場イン。駐車場3台確保。<br>
+          過剰北部を通ってステージ裏へ（有賀アテンド）。<br>
+          おとみ着替え → 出演者控室。荷物はスタッフ控室。犬・猫は着ぐるみのまま移動。
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-t">終演後</div>
+        <div class="tl-b">椅子撤収 / 実行委員長と補佐数名を除き搬出誘導へ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ★ 4. 開催変更・中止 -->
+<div class="card">
+  <div class="ch">
+    <span class="ch-icon">🌧️</span>
+    <span class="ch-label">開催変更・中止について</span>
+  </div>
+  <div class="cb">
+    <div class="tw">
+      <table>
+        <thead><tr><th>状況</th><th>対応</th></tr></thead>
+        <tbody>
+          <tr><td><strong>雨天</strong></td><td>予定通り開催</td></tr>
+          <tr><td><strong>荒天</strong></td><td>主催者判断で中止<br><span class="note">イベント前日 午前6時に判断</span></td></tr>
+          <tr><td><strong>その他やむを得ない事象</strong></td><td>主催者が開催困難と判断した場合は中止</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-warn" style="margin-top:10px">
+      <strong>出店者への返金</strong>
+      <p>実行委判断による中止の場合、支払い済みの出店料金は返金。ただし出店準備費・交通費等は事務局負担外。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ★ 5. 商品券 -->
+<div class="card">
+  <div class="ch">
+    <span class="ch-icon">🎫</span>
+    <span class="ch-label">商品券について</span>
+  </div>
+  <div class="cb">
+    <p>各プログラムで入賞した来場者に <strong>500円分の商品券</strong>を配布（当日のみ使用可）。</p>
+    <div class="box box-warn" style="margin-top:10px">
+      <strong>換金</strong>
+      <p>イベント終了後 <strong>17:00 まで</strong>に運営本部にて換金。<strong>必ず釣り銭を用意しておくこと。</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ★ 6. 搬入出スケジュール -->
+<div class="card" id="s-transport">
+  <div class="ch">
+    <span class="ch-icon">🚗</span>
+    <span class="ch-label">搬入出スケジュール &amp; 人員配置</span>
+    <span class="ch-tag">毎年更新</span>
+  </div>
+  <div class="cb">
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>日時</th><th>内容</th><th>備考</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="white-space:nowrap"><strong>XX月XX日（土）</strong><br>15:00〜18:00</td>
+            <td>前日準備</td>
+            <td>各出店者のみ入場可</td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap"><strong>XX月XX日（祝日）</strong><br>7:00〜8:00</td>
+            <td>当日準備</td>
+            <td>6時集合。出店者1台のみ入場可</td>
+          </tr>
+          <tr>
+            <td>9:00〜16:00</td>
+            <td>イベント本番</td>
+            <td><strong>8:30までに車両搬出完了</strong></td>
+          </tr>
+          <tr>
+            <td>17:00〜19:30</td>
+            <td>撤収</td>
+            <td>車両搬入は 16:30 以降</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin:16px 0 8px;font-size:14px;color:var(--primary)">人員配置（駐車場・誘導）</h3>
+    <div class="box box-info" style="font-size:13px;margin-bottom:10px">
+      ハザードランプ点灯・時速15km以下徐行を徹底。公園内は<strong>右回り</strong>。
+    </div>
+
+    <div class="pl">
+      <div class="pl-item"><span class="pnum">①</span><span>交差点を直進案内（有賀）</span></div>
+      <div class="pl-item"><span class="pnum">②</span><span>出入口へ案内 → 落ち着いたら③の補助（稲田 / 岩本）</span></div>
+      <div class="pl-item"><span class="pnum">③</span><span>詰めて停車。満車時は臨時駐車場へ案内。④と入退場の調整（徳山）</span></div>
+      <div class="pl-item"><span class="pnum">④</span><span>車両の入退場調整、出店位置の告示（緒方）</span></div>
+      <div class="pl-item"><span class="pnum">⑤</span><span>退場車調整。④の補助（川畑）</span></div>
+      <div class="pl-item"><span class="pnum">⑥</span><span>振り分け（井崎）</span></div>
+      <div class="pl-item"><span class="pnum">⑦</span><span>徐行要請・合流調整（二川）</span></div>
+      <div class="pl-item"><span class="pnum">⑧</span><span>キッチンカー誘導（黒木）</span></div>
+      <div class="pl-item"><span class="pnum">⑨</span><span>誘導・合流調整（川野）</span></div>
+      <div class="pl-item"><span class="pnum">⑩</span><span>誘導・合流調整（中山）</span></div>
+      <div class="pl-item"><span class="pnum">⑪</span><span>誘導・合流調整（通山）</span></div>
+      <div class="pl-item"><span class="pnum">⑫</span><span>誘導・合流調整（長田）</span></div>
+      <div class="pl-item"><span class="pnum">⑬</span><span>補助（東）</span></div>
+      <div class="pl-item"><span class="pnum">⑭</span><span>徐行要請・進入調整（斧）</span></div>
+      <div class="pl-item"><span class="pnum">⑮</span><span>駐車整理・入退場補助（黒島 / ●●）</span></div>
+      <div class="pl-item"><span class="pnum">⑯</span><span>徐行要請・進入調整</span></div>
+    </div>
+
+    <div class="box box-warn" style="margin-top:13px;font-size:13px">
+      <strong>8時めどに縮小体制（15人 → 5〜7人）</strong>
+      <p>● 井崎・稲田・有賀 → 7:45ごろにボラ対応へ<br>
+      ● 緒方 → ピーク越え次第、本部へ<br>
+      ● 青年部 → ピーク越え次第、1〜2人を残してブース準備へ<br>
+      ● 東・青年部1〜2人・役場4人 → 8時半ごろまで</p>
+    </div>
+
+    <h3 style="margin:16px 0 6px;font-size:14px;color:var(--primary)">会場誘導図</h3>
+    <img src="images/image4.png" alt="会場誘導マップ" class="img-full" loading="lazy">
+    <img src="images/image5.png" alt="会場誘導マップ（北側）" class="img-full" loading="lazy">
+    <img src="images/image7.png" alt="会場誘導マップ（詳細）" class="img-full" loading="lazy">
+  </div>
+</div>
+
+<!-- ★ 7. 全体レイアウト -->
+<div class="card" id="s-layout">
+  <div class="ch">
+    <span class="ch-icon">🗺</span>
+    <span class="ch-label">全体レイアウト &amp; 駐車場配置</span>
+    <span class="ch-tag">毎年確認</span>
+  </div>
+  <div class="cb">
+    <div class="box box-info" style="font-size:13px;margin-bottom:12px">
+      出店者駐車場 → <strong>西駐車場</strong>（満車時は北側駐車場へ）<br>
+      スタッフ駐車場 → <strong>きらり横</strong><br>
+      警備員配置 → 8:00〜17:30（休憩含）
+    </div>
+
+    <div class="tw">
+      <table style="font-size:13px">
+        <tbody>
+          <tr><td>① メイン入場口</td><td>② アンケート</td></tr>
+          <tr><td>③ スタッフ控室</td><td>④ 運営本部</td></tr>
+          <tr><td>⑤ ステージ</td><td>⑥ 音響</td></tr>
+          <tr><td>⑦ 出演者控室（なりきり・ダンス）</td><td>⑧ 仮設トイレ</td></tr>
+          <tr><td>⑨ キッチンカー</td><td>⑩⑫ 一般出店者</td></tr>
+          <tr><td>⑪ テラス席</td><td>⑬ 行政・地域団体</td></tr>
+          <tr><td>⑭ 高城プロレスリング</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">全体レイアウト図</h3>
+    <img src="images/image12.png" alt="全体レイアウト図" class="img-full" loading="lazy">
+
+    <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">駐車場・警備員配置図</h3>
+    <img src="images/image14.png" alt="駐車場・警備員配置図" class="img-full" loading="lazy">
+    <img src="images/image9.jpeg" alt="駐車場補足図" class="img-full" loading="lazy">
+    <img src="images/image10.jpeg" alt="駐車場補足図2" class="img-full" loading="lazy">
+    <img src="images/image11.jpeg" alt="駐車場補足図3" class="img-full" loading="lazy">
+  </div>
+</div>
+
+<!-- ★ 8. 出店者 -->
+<div class="card" id="s-vendors">
+  <div class="ch">
+    <span class="ch-icon">🏪</span>
+    <span class="ch-label">出店者配置・一覧・撮影方針</span>
+    <span class="ch-tag">毎年更新（必須）</span>
+  </div>
+
+  <details open>
+    <summary>出店者配置図</summary>
+    <div class="det">
+      <p class="note" style="margin-bottom:8px">ステージ起点に西側・東側で区分</p>
+      <img src="images/image15.png" alt="出店者配置図（西側）" class="img-full" loading="lazy">
+      <img src="images/image16.png" alt="出店者配置図（東側）" class="img-full" loading="lazy">
+    </div>
+  </details>
+
+  <details>
+    <summary>出店者一覧 &amp; 当日ブース案内</summary>
+    <div class="det">
+      <div class="box box-info" style="font-size:13px;margin-bottom:10px">
+        飲食・雑貨・ワークショップ → 事前割り振り<br>
+        キッチンカー → 先着順に奥から誘導（K1、K2…）
+      </div>
+      <img src="images/image17.png" alt="出店者一覧" class="img-full" loading="lazy">
+    </div>
+  </details>
+
+  <details>
+    <summary>来場者による撮影対応方針</summary>
+    <div class="det">
+      <p style="font-size:13.5px;margin-bottom:8px">「まつりしんとみ」開催中、実行委・撮影スタッフが撮影する写真・動画の著作権は実行委に帰属し、必要と判断した用途にのみ使用することを基本方針とする。</p>
+      <div class="box box-danger" style="font-size:13.5px">
+        <strong>【禁止事項】（見かけたら注意を促す）</strong>
+        <ol style="padding-left:18px;margin-top:6px;line-height:2">
+          <li>安全な会場運営の妨げとなるような行為</li>
+          <li>長時間にわたって多くの来場者の視線を妨げる行為</li>
+          <li>脚立等により他来場者の安全を妨げる行為</li>
+          <li>執拗なフラッシュ撮影など出演者の迷惑となる行為</li>
+        </ol>
+        <p style="margin-top:6px">上記以外でも運営に支障をきたすと委員長が判断した場合は個別に注意する。</p>
+      </div>
+    </div>
+  </details>
+</div>
+
+<!-- ★ 9. 連絡先 -->
+<div class="card" id="s-contacts">
+  <div class="ch">
+    <span class="ch-icon">📞</span>
+    <span class="ch-label">関係人員・連絡先</span>
+    <span class="ch-tag">毎年更新（必須）</span>
+  </div>
+
+  <details open>
+    <summary>実行委員会 連絡先一覧</summary>
+    <div class="det">
+      <div class="tw">
+        <table>
+          <thead>
+            <tr><th>役職</th><th>氏名</th><th>連絡先</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>実行委員長</td><td>倉永</td><td><a href="tel:09043449098" class="tel">090-4344-9098</a></td></tr>
+            <tr><td>副実行委員長</td><td>緒方</td><td><a href="tel:08051331673" class="tel">080-5133-1673</a></td></tr>
+            <tr><td>事務局長</td><td>井崎</td><td><a href="tel:09067655631" class="tel">090-6765-5631</a></td></tr>
+            <tr><td>委員</td><td>中山</td><td><a href="tel:08017754538" class="tel">080-1775-4538</a></td></tr>
+            <tr><td>委員</td><td>徳山</td><td><a href="tel:09087689456" class="tel">090-8768-9456</a></td></tr>
+            <tr><td>委員</td><td>有賀</td><td><a href="tel:08054628462" class="tel">080-5462-8462</a></td></tr>
+            <tr>
+              <td>委員</td><td>川畑</td>
+              <td>社: <a href="tel:09057300451" class="tel">090-5730-0451</a><br>私: <a href="tel:08017955533" class="tel">080-1795-5533</a></td>
+            </tr>
+            <tr><td>委員</td><td>渡邉</td><td><a href="tel:08052421718" class="tel">080-5242-1718</a></td></tr>
+            <tr><td>委員</td><td>有馬</td><td><a href="tel:09011655892" class="tel">090-1165-5892</a></td></tr>
+            <tr><td>委員</td><td>稲田</td><td><a href="tel:09013429129" class="tel">090-1342-9129</a></td></tr>
+            <tr><td>委員</td><td>草野</td><td><a href="tel:09010817965" class="tel">090-1081-7965</a></td></tr>
+            <tr><td>委員</td><td>斉田</td><td><a href="tel:09086673577" class="tel">090-8667-3577</a></td></tr>
+            <tr><td>委員</td><td>東</td><td><a href="tel:09086645658" class="tel">090-8664-5658</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>ボランティア（高校生）対応</summary>
+    <div class="det">
+      <div class="box box-info" style="margin-bottom:10px">
+        <strong>集合：7時50分</strong>
+        <p>担当：稲田・井崎・徳山・斉田</p>
+      </div>
+      <ul style="font-size:13.5px;line-height:2.2;padding-left:20px">
+        <li>ステージ周り補佐全般</li>
+        <li>トイレットペーパーの定期確認</li>
+        <li>おとみ引率（徘徊時）</li>
+        <li>会場見回り</li>
+        <li>風船づくり作業</li>
+        <li>整理券配布</li>
+        <li>アンケート配布</li>
+        <li>その他必要に応じて</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>関係者駐車場 割り振り</summary>
+    <div class="det">
+      <div class="box box-info" style="font-size:13px;margin-bottom:8px">
+        コーン（生涯学習課）… 20個、各種サイン
+      </div>
+      <img src="images/image18.png" alt="関係者駐車場割り振り" class="img-full" loading="lazy">
+    </div>
+  </details>
+</div>
+
+<!-- ★ 10. 緊急時対応 -->
+<div class="card" id="s-emergency">
+  <div class="ch red">
+    <span class="ch-icon">🚨</span>
+    <span class="ch-label">緊急時対応</span>
+    <span class="ch-tag">毎年番号再確認</span>
+  </div>
+  <div class="cb">
+    <div class="em-grid">
+      <div class="em-num">
+        <div class="em-org">宮崎県東児湯消防組合</div>
+        <div class="em-n"><a href="tel:0983221360">0983-22-1360</a></div>
+      </div>
+      <div class="em-num">
+        <div class="em-org">高鍋警察署</div>
+        <div class="em-n"><a href="tel:0983220110">0983-22-0110</a></div>
+      </div>
+    </div>
+    <p class="note" style="text-align:right;margin-bottom:14px">20XX年XX月時点</p>
+
+    <div style="margin-bottom:14px">
+      <strong>消火器の位置</strong>
+      <p style="font-size:14px;color:var(--red);font-weight:700;margin-top:4px">→ 各自で事前に確認すること</p>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <strong style="display:block;margin-bottom:10px">病人・けが人発生時</strong>
+      <ol class="steps">
+        <li>状況を確認 → 店舗責任者から本部に連絡</li>
+        <li><strong>軽傷・休息が必要な場合：</strong>本部を救護室として使用。店舗スタッフまたは実行委が付き添い、常時状態を観察する。</li>
+        <li><strong style="color:var(--red)">急病・重症・緊急の医療対応が必要な場合：迷わず救急車を呼ぶ（119番）</strong></li>
+      </ol>
+    </div>
+
+    <div>
+      <strong>落とし物の対応</strong>
+      <p style="font-size:13.5px;margin-top:4px">
+        開催中 → 会場受付で対応（休憩時に司会より案内）<br>
+        終了後 → 主催者にて保管
+      </p>
+    </div>
+
+    <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">緊急連絡・救護位置図</h3>
+    <img src="images/image19.png" alt="緊急連絡・救護位置図" class="img-full" loading="lazy">
+  </div>
+</div>
+
+<!-- ★ 11. 香盤表 -->
+<div class="card" id="s-cue">
+  <div class="ch">
+    <span class="ch-icon">📅</span>
+    <span class="ch-label">香盤表（タイムスケジュール）</span>
+    <span class="ch-tag">毎年更新</span>
+  </div>
+  <div class="cb">
+    <p class="note" style="margin-bottom:10px">臨機応変に対応すること</p>
+    <img src="images/image20.png" alt="香盤表" class="img-full" loading="lazy">
+    <img src="images/image21.png" alt="香盤表（続き）" class="img-full" loading="lazy">
+    <img src="images/image22.png" alt="香盤表（続き2）" class="img-full" loading="lazy">
+  </div>
+</div>
+
+<!-- ★ 12. 柔道技 -->
+<div class="card">
+  <div class="ch">
+    <span class="ch-icon">🥋</span>
+    <span class="ch-label">柔道技（演目参考資料）</span>
+    <span class="ch-tag">使用演目に応じて更新・削除可</span>
+  </div>
+  <div class="cb">
+    <img src="images/image23.jpg" alt="柔道技1" class="img-full" loading="lazy">
+    <img src="images/image24.png" alt="柔道技2" class="img-full" loading="lazy">
+    <img src="images/image25.png" alt="柔道技3" class="img-full" loading="lazy">
+    <img src="images/image26.jpeg" alt="柔道技4" class="img-full" loading="lazy">
+    <img src="images/image27.jpeg" alt="柔道技5" class="img-full" loading="lazy">
+  </div>
+</div>
+
+</main>
+
+<footer>
+  まつりしんとみ実行委員会 — スタッフ要項テンプレート<br>
+  <small>配布前に年度・日付・担当者・連絡先を必ず更新してください。</small>
+</footer>
+
+</body>
+</html>
