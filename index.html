@@ -637,6 +637,50 @@ footer {
 }
 .cl-reset-btn:hover { background: var(--bg); }
 
+/* ===== KABAN TABLE ===== */
+.kaban-table { font-size: 13px; }
+.kaban-table .kb-phase td {
+  background: linear-gradient(90deg, var(--primary) 0%, #263e6e 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 7px 11px;
+  letter-spacing: .3px;
+}
+.kaban-table .kb-time {
+  white-space: nowrap;
+  font-weight: 700;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  width: 90px;
+  vertical-align: top;
+  padding-top: 10px;
+}
+.kaban-table .kb-content { font-weight: 600; }
+.kaban-table .kb-staff { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.kaban-table .kb-note { color: var(--muted); font-size: 12px; }
+.kaban-table td { vertical-align: top; padding: 9px 11px; }
+.kaban-table tr.kb-important .kb-content { color: var(--accent); }
+.kaban-table tr.kb-important .kb-time { color: var(--accent); }
+.kb-placeholder { color: #aaa; font-style: italic; }
+.kaban-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(27,45,85,.08);
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s;
+}
+.kaban-dl-btn:hover { background: rgba(27,45,85,.15); }
+
 @media print {
   header { position: relative; box-shadow: none; }
   .qnav, #top-btn, #prog, #clock, #search-bar, .search-toggle, #cd-bar { display: none; }
@@ -1200,22 +1244,164 @@ footer {
   <details>
   <summary>香盤表（タイムスケジュール）</summary>
   <div class="det">
+    <!--
+      ========================================
+      香盤表 毎年更新箇所
+      ・前日・当日の日付（XX月XX日）を実際の日付に
+      ・各行の時刻・内容・担当を実情に合わせて修正
+      ・「kb-placeholder」クラスの仮データを本番データに差し替え
+      ========================================
+    -->
+    <a href="kaban.pdf" class="kaban-dl-btn" target="_blank">📄 PDF版 ダウンロード</a>
     <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
 
-    <!-- PDF open button (works on all devices) -->
-    <a href="kaban.pdf" class="pdf-open-btn" target="_blank">
-      <span class="pdf-icon">📄</span>
-      <span>香盤表 PDF を開く（別タブ）</span>
-    </a>
+    <div class="tw">
+      <table class="kaban-table">
+        <thead>
+          <tr>
+            <th style="width:90px">時刻</th>
+            <th>内容 / 演目</th>
+            <th style="width:110px">担当</th>
+            <th>備考</th>
+          </tr>
+        </thead>
+        <tbody>
 
-    <!-- PDF inline preview (desktop only) -->
-    <div class="pdf-embed-wrap">
-      <iframe src="kaban.pdf" title="香盤表プレビュー" loading="lazy"></iframe>
-    </div>
+          <!-- ◆ 前日 -->
+          <tr class="kb-phase"><td colspan="4">◆ 前日準備（<span class="kb-placeholder">XX月XX日・土</span>）</td></tr>
+          <tr>
+            <td class="kb-time">15:00〜18:00</td>
+            <td class="kb-content">前日準備・出店者搬入</td>
+            <td class="kb-staff">—</td>
+            <td class="kb-note">各出店者のみ入場可</td>
+          </tr>
 
-    <p style="font-size:12px;color:var(--muted);margin-top:8px;text-align:center">
-      毎年 kaban.pdf を最新の香盤表PDFファイルに差し替えてください
-    </p>
+          <!-- ◆ 当日朝 -->
+          <tr class="kb-phase"><td colspan="4">◆ 当日 朝（<span class="kb-placeholder">XX月XX日・祝</span>）</td></tr>
+          <tr>
+            <td class="kb-time">6:00</td>
+            <td class="kb-content">実行委・青年部 集合</td>
+            <td class="kb-staff">全委員</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time">7:00〜8:00</td>
+            <td class="kb-content">搬入</td>
+            <td class="kb-staff">全委員</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time">7:50</td>
+            <td class="kb-content">ボランティア集合 / 風船作業 開始</td>
+            <td class="kb-staff">井崎・徳山・稲田</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time">8:00</td>
+            <td class="kb-content">司会 集合 / 最終打ち合わせ</td>
+            <td class="kb-staff">倉永・有賀</td>
+            <td class="kb-note">8:30 までに搬入車両を退出</td>
+          </tr>
+          <tr>
+            <td class="kb-time">8:30</td>
+            <td class="kb-content">太鼓 準備</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time">8:45</td>
+            <td class="kb-content">ラムネ早飲み 受付開始（先着100人・整理券）</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note"></td>
+          </tr>
+
+          <!-- ◆ 本番 -->
+          <tr class="kb-phase"><td colspan="4">◆ 本番（9:00〜16:00）</td></tr>
+          <tr class="kb-important">
+            <td class="kb-time">9:00</td>
+            <td class="kb-content">開場 / イベント開始</td>
+            <td class="kb-staff">全員</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time">9:10</td>
+            <td class="kb-content">風船配布（目安300枚）</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note">様子を見て増減</td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">なりきり選手権</td>
+            <td class="kb-staff">倉永・補佐</td>
+            <td class="kb-note">審査員席・タイムキーパー配置</td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">ラムネ早飲み（6人×10レース）</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note">小学生以下8、中以上2</td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">和太鼓演奏</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">きぐるみダンス</td>
+            <td class="kb-staff kb-placeholder">担当者</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">おとみ・動物 入場</td>
+            <td class="kb-staff">有賀</td>
+            <td class="kb-note">駐車場3台確保 / 着替え後ステージ裏へ</td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">せんぐまき</td>
+            <td class="kb-staff kb-placeholder">テゲバ・ヴィアマ選手</td>
+            <td class="kb-note">菓子・マイク2本準備</td>
+          </tr>
+          <tr>
+            <td class="kb-time kb-placeholder">【時間】</td>
+            <td class="kb-content">景品抽選</td>
+            <td class="kb-staff">倉永（MC）</td>
+            <td class="kb-note">ステージ前ロープで仕切る / 換金・高鍋高ラグビー告知</td>
+          </tr>
+          <tr class="kb-important">
+            <td class="kb-time">16:00</td>
+            <td class="kb-content">イベント終了宣言</td>
+            <td class="kb-staff">倉永</td>
+            <td class="kb-note">椅子撤収 開始</td>
+          </tr>
+
+          <!-- ◆ 撤収 -->
+          <tr class="kb-phase"><td colspan="4">◆ 撤収（16:30〜）</td></tr>
+          <tr>
+            <td class="kb-time">16:30〜</td>
+            <td class="kb-content">車両搬入 開始 / 撤収作業</td>
+            <td class="kb-staff">全員</td>
+            <td class="kb-note"></td>
+          </tr>
+          <tr class="kb-important">
+            <td class="kb-time">17:00</td>
+            <td class="kb-content">商品券 換金 締切</td>
+            <td class="kb-staff">本部</td>
+            <td class="kb-note">釣り銭を事前に用意</td>
+          </tr>
+          <tr>
+            <td class="kb-time">17:00〜19:30</td>
+            <td class="kb-content">全体撤収</td>
+            <td class="kb-staff">全員</td>
+            <td class="kb-note"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div><!-- /.tw -->
   </div>
   </details>
 </div>
