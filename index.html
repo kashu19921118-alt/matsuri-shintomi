@@ -618,7 +618,7 @@ footer {
 }
 
 /* ===== CHECKLIST ===== */
-.checklist { display: grid; gap: 0; margin-bottom: 12px; }
+.checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; margin-bottom: 12px; }
 .cl-item {
   display: flex;
   align-items: flex-start;
@@ -632,7 +632,7 @@ footer {
   -webkit-tap-highlight-color: transparent;
   transition: color .15s;
 }
-.cl-item:last-child { border-bottom: none; }
+.cl-item:nth-last-child(-n+2) { border-bottom: none; }
 .cl-item input[type="checkbox"] {
   width: 20px; height: 20px;
   flex-shrink: 0;
@@ -1583,15 +1583,36 @@ footer {
   </details>
 </div>
 
-<!-- ★ 10.5 当日チェックリスト -->
+<!-- ★ 10.5 事前&当日チェックリスト -->
 <div class="card" id="s-checklist">
   <div class="ch">
     <span class="ch-icon">✅</span>
-    <span class="ch-label">当日チェックリスト</span>
+    <span class="ch-label">事前&amp;当日チェックリスト</span>
     <span class="ch-tag">準備確認</span>
   </div>
+
   <details>
-  <summary>スタッフ準備チェック</summary>
+  <summary>事前チェック（開催前まで）</summary>
+  <div class="det">
+    <p class="cl-note">チェックした内容はリロードしても保持されます。全員分終わったらリセットしてください。</p>
+    <div class="checklist">
+      <label class="cl-item"><input type="checkbox" data-ck="pre-team"> 実行委員会・担当割の体制が確定している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-vendor"> 出店者への説明会・案内事項の周知が完了している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-script"> 進行台本・香盤表の最終確認が完了している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-volunteer"> 学生ボランティア・青年部との事前打ち合わせが完了している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-tickets"> 商品券・抽選券・釣り銭の準備が完了している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-signage"> 駐車場看板・誘導サイン類の準備が完了している</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-contacts"> 実行委員会 連絡先一覧を最新化・共有済み</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-emergency"> 緊急連絡先（消防・警察等）を再確認済み</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-transport"> 前日搬入スケジュールを出店者へ周知済み</label>
+      <label class="cl-item"><input type="checkbox" data-ck="pre-weather"> 荒天時の中止判断基準を実行委員間で共有済み</label>
+    </div>
+    <button class="cl-reset-btn">この項目をリセット</button>
+  </div>
+  </details>
+
+  <details>
+  <summary>当日チェック（イベント当日）</summary>
   <div class="det">
     <p class="cl-note">チェックした内容はリロードしても保持されます。全員分終わったらリセットしてください。</p>
     <div class="checklist">
@@ -1604,9 +1625,13 @@ footer {
       <label class="cl-item"><input type="checkbox" data-ck="vendor"> 出店者への案内事項を確認した</label>
       <label class="cl-item"><input type="checkbox" data-ck="transport"> 搬入・搬出ルールを把握した</label>
       <label class="cl-item"><input type="checkbox" data-ck="emergency"> 緊急連絡先・対応手順を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="day-parking"> 駐車場誘導ルール（ハザードランプ点灯・右回り徐行）を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="day-voucher"> 商品券・抽選券の換金・半券対応を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="day-weather"> 雨天・荒天時の対応基準を確認した</label>
+      <label class="cl-item"><input type="checkbox" data-ck="day-photo"> 来場者撮影対応方針（禁止事項）を確認した</label>
       <label class="cl-item"><input type="checkbox" data-ck="final"> 開場前の最終確認完了</label>
     </div>
-    <button class="cl-reset-btn">リセット</button>
+    <button class="cl-reset-btn">この項目をリセット</button>
   </div>
   </details>
 </div>
@@ -1902,17 +1927,18 @@ if('serviceWorker' in navigator){
     });
   });
 
-  var resetBtn = document.querySelector('.cl-reset-btn');
-  if(resetBtn){
-    resetBtn.addEventListener('click', function(){
+  var resetBtns = document.querySelectorAll('.cl-reset-btn');
+  resetBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
       if(!confirm('チェックをすべてリセットしますか？')) return;
-      boxes.forEach(function(cb){
+      var scope = btn.closest('.det') || document;
+      scope.querySelectorAll('[data-ck]').forEach(function(cb){
         cb.checked = false;
         cb.closest('.cl-item').classList.remove('done');
         localStorage.removeItem(PREFIX + cb.getAttribute('data-ck'));
       });
     });
-  }
+  });
 })();
 
 // ---- Image lightbox ----
