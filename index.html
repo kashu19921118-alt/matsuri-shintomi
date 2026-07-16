@@ -195,6 +195,24 @@ main {
   font-weight: normal;
   white-space: nowrap;
 }
+.ch-tag.draft {
+  background: var(--accent2);
+  color: #4a3300;
+  font-weight: 700;
+}
+
+/* ===== DRAFT NOTICE (2025年データ暫定表示) ===== */
+.draft-notice {
+  background: #fef9e7;
+  border: 1px solid #f39c12;
+  color: var(--amber);
+  border-radius: 8px;
+  padding: 10px 13px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.draft-notice strong { color: var(--amber); }
 
 .cb { padding: 15px 16px; }
 
@@ -776,10 +794,15 @@ footer {
     <span class="ch-icon">📋</span>
     <span class="ch-label">開催概要</span>
     <span class="ch-tag">毎年更新</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
   <details>
   <summary>開催概要</summary>
   <div class="det">
+    <div class="draft-notice">
+      <strong>🚧 調整中</strong>
+      日時以外の内容は2025年開催分を仮に当て込んだものです。2026年の情報が確定次第、更新します。
+    </div>
     <div class="info-rows">
       <div class="ir">
         <span class="ir-l">日時</span>
@@ -820,11 +843,16 @@ footer {
     <span class="ch-icon">👥</span>
     <span class="ch-label">担当割</span>
     <span class="ch-tag">毎年更新</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
 
   <details>
     <summary>準備期間の担当割（案）</summary>
     <div class="det">
+      <div class="draft-notice">
+        <strong>🚧 調整中</strong>
+        2025年開催分の担当割を仮に当て込んだものです。2026年の体制が確定次第、更新します。
+      </div>
       <div class="tw">
         <table>
           <thead>
@@ -930,7 +958,7 @@ footer {
       </div>
       <div class="tl-item">
         <div class="tl-t">9:35</div>
-        <div class="tl-b">④町民ダンス発表会 前半戦（3組）</div>
+        <div class="tl-b">④町民ダンス前半戦（2組）</div>
       </div>
       <div class="tl-item">
         <div class="tl-t sub">▼ ⑤なりきり選手権〜子どもの部〜（10:30〜）</div>
@@ -949,19 +977,19 @@ footer {
       </div>
       <div class="tl-item">
         <div class="tl-t">12:10</div>
-        <div class="tl-b">⑦町民ダンス発表会 後半戦（2組）</div>
+        <div class="tl-b">⑦町民ダンス後半戦（2組）</div>
       </div>
       <div class="tl-item">
         <div class="tl-t">12:45</div>
-        <div class="tl-b">⑧みんなでひなたのチカラ！！（キャラクターショー等）</div>
+        <div class="tl-b">⑧みんなでひなたのチカラダンス！</div>
         <div class="tl-s">テゲバ試合宣伝 / みやざき犬・おとみ・みやねこ等 キャラクターショー</div>
       </div>
       <div class="tl-item">
         <div class="tl-t">13:15</div>
-        <div class="tl-b">⑨障害物競争</div>
+        <div class="tl-b">⑨障害物競走</div>
       </div>
       <div class="tl-item">
-        <div class="tl-t sub">▼ ⑩なりきり選手権（本選・大人の部）（13:45〜）</div>
+        <div class="tl-t sub">▼ ⑩なりきり選手権〜大人の部〜（13:45〜）</div>
         <div class="tl-s">
           審査員登壇 / 音源：CDまたはBluetooth接続<br>
           タイムキーパー・採点表回収・演者誘導
@@ -969,7 +997,7 @@ footer {
       </div>
       <div class="tl-item">
         <div class="tl-t">15:10</div>
-        <div class="tl-b">◇ボランティアチーム紹介</div>
+        <div class="tl-b">◇ボランティアスタッフ紹介</div>
         <div class="tl-s">学生・役場スタッフをステージへ</div>
       </div>
       <div class="tl-item">
@@ -981,7 +1009,7 @@ footer {
       </div>
       <div class="tl-item">
         <div class="tl-t">15:40</div>
-        <div class="tl-b">★D-1グランプリ選手権 結果発表</div>
+        <div class="tl-b">★スタグル選手権 結果発表</div>
       </div>
       <div class="tl-item">
         <div class="tl-t sub">▼ ⑫せんぐまき（15:50〜）</div>
@@ -1055,10 +1083,15 @@ footer {
     <span class="ch-icon">🚗</span>
     <span class="ch-label">搬入出スケジュール &amp; 人員配置</span>
     <span class="ch-tag">毎年更新</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
   <details>
   <summary>スケジュール &amp; 人員配置</summary>
   <div class="det">
+    <div class="draft-notice">
+      <strong>🚧 調整中</strong>
+      2025年開催分のスケジュール・人員配置を仮に当て込んだものです。2026年の情報が確定次第、更新します。
+    </div>
     <div class="tw">
       <table>
         <thead>
@@ -1145,10 +1178,15 @@ footer {
     <span class="ch-icon">🗺</span>
     <span class="ch-label">全体レイアウト &amp; 駐車場配置</span>
     <span class="ch-tag">毎年確認</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
   <details>
   <summary>全体レイアウト &amp; 駐車場配置</summary>
   <div class="det">
+    <div class="draft-notice">
+      <strong>🚧 調整中</strong>
+      2025年開催分のレイアウト・駐車場配置を仮に当て込んだものです。2026年の情報が確定次第、更新します。
+    </div>
     <div class="box box-info" style="font-size:13px;margin-bottom:12px">
       出店者駐車場 → <strong>西駐車場</strong>（満車時は北側駐車場へ）<br>
       スタッフ駐車場 → <strong>きらり横</strong><br>
@@ -1200,11 +1238,16 @@ footer {
     <span class="ch-icon">🏪</span>
     <span class="ch-label">出店者配置・一覧・撮影方針</span>
     <span class="ch-tag">毎年更新（必須）</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
 
   <details>
     <summary>出店者配置図</summary>
     <div class="det">
+      <div class="draft-notice">
+        <strong>🚧 調整中</strong>
+        2025年開催分の配置図を仮に当て込んだものです。2026年の出店者情報が確定次第、更新します。
+      </div>
       <p class="note" style="margin-bottom:8px">ステージ起点に西側・東側で区分</p>
       <div class="img-grid-2">
         <figure class="fig">
@@ -1254,11 +1297,16 @@ footer {
     <span class="ch-icon">📞</span>
     <span class="ch-label">関係人員・連絡先</span>
     <span class="ch-tag">毎年更新（必須）</span>
+    <span class="ch-tag draft">🚧 調整中</span>
   </div>
 
   <details>
     <summary>実行委員会 連絡先一覧</summary>
     <div class="det">
+      <div class="draft-notice">
+        <strong>🚧 調整中</strong>
+        2025年開催分の連絡先一覧を仮に当て込んだものです。2026年の体制が確定次第、更新します。
+      </div>
       <div class="tw">
         <table>
           <thead>
@@ -1433,7 +1481,7 @@ footer {
           </tr>
           <tr>
             <td class="kb-time">9:35</td>
-            <td class="kb-content">④町民ダンス発表会 前半戦（3組）</td>
+            <td class="kb-content">④町民ダンス前半戦（2組）</td>
             <td class="kb-staff">稲田・草野</td>
             <td class="kb-note"></td>
           </tr>
@@ -1451,31 +1499,31 @@ footer {
           </tr>
           <tr>
             <td class="kb-time">12:10</td>
-            <td class="kb-content">⑦町民ダンス発表会 後半戦（2組）</td>
+            <td class="kb-content">⑦町民ダンス後半戦（2組）</td>
             <td class="kb-staff">稲田・草野</td>
             <td class="kb-note"></td>
           </tr>
           <tr class="kb-important">
             <td class="kb-time">12:45</td>
-            <td class="kb-content">⑧みんなでひなたのチカラ！！（キャラクターショー等）</td>
+            <td class="kb-content">⑧みんなでひなたのチカラダンス！</td>
             <td class="kb-staff">倉永・有賀・中山</td>
             <td class="kb-note">テゲバ試合宣伝 / みやざき犬・おとみ・みやねこ等 キャラクターショー</td>
           </tr>
           <tr class="kb-important">
             <td class="kb-time">13:15</td>
-            <td class="kb-content">⑨障害物競争</td>
+            <td class="kb-content">⑨障害物競走</td>
             <td class="kb-staff">井崎・稲田・学生ボラ</td>
             <td class="kb-note"></td>
           </tr>
           <tr class="kb-important">
             <td class="kb-time">13:45</td>
-            <td class="kb-content">⑩なりきり選手権（本選・大人の部）</td>
+            <td class="kb-content">⑩なりきり選手権〜大人の部〜</td>
             <td class="kb-staff">倉永（審判）・川畑（タイムキーパー）・補佐多数</td>
             <td class="kb-note">審査員登壇 / 音源：CDまたはBluetooth接続</td>
           </tr>
           <tr>
             <td class="kb-time">15:10</td>
-            <td class="kb-content">◇ボランティアチーム紹介</td>
+            <td class="kb-content">◇ボランティアスタッフ紹介</td>
             <td class="kb-staff">倉永</td>
             <td class="kb-note">学生・役場スタッフをステージへ</td>
           </tr>
@@ -1487,7 +1535,7 @@ footer {
           </tr>
           <tr class="kb-important">
             <td class="kb-time">15:40</td>
-            <td class="kb-content">★D-1グランプリ選手権 結果発表</td>
+            <td class="kb-content">★スタグル選手権 結果発表</td>
             <td class="kb-staff">倉永</td>
             <td class="kb-note"></td>
           </tr>
@@ -1508,7 +1556,7 @@ footer {
           <tr class="kb-phase"><td colspan="4">◆ 撤収（16:30〜）</td></tr>
           <tr>
             <td class="kb-time">16:30〜</td>
-            <td class="kb-content">出店者車両 移動開始 / 撤収作業</td>
+            <td class="kb-content">⑭搬出アナウンス / 出店者車両 移動開始・撤収作業</td>
             <td class="kb-staff">全員</td>
             <td class="kb-note">16:30まで車内待機・車両移動禁止を徹底</td>
           </tr>
