@@ -353,12 +353,12 @@ a.tel:hover { color: var(--accent); }
 }
 
 /* ===== POSITION LIST ===== */
-.pl { display: grid; gap: 3px; margin-top: 8px; }
+.pl { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-top: 8px; }
 .pl-item {
   display: flex; gap: 10px; align-items: flex-start;
   font-size: 13.5px; padding: 6px 0; border-bottom: 1px solid #f0f0f0;
 }
-.pl-item:last-child { border-bottom: none; }
+.pl-item:nth-last-child(-n+2) { border-bottom: none; }
 .pnum {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; border-radius: 50%;
@@ -1079,7 +1079,7 @@ footer {
       <strong>当日は半券を切るよう適宜アナウンスすること。</strong></p>
     </div>
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">チケット切り取り図</h3>
-    <a href="チケット切り取り図1.pdf" class="kaban-dl-btn" target="_blank">📄 チケット切り取り図 PDF ダウンロード</a>
+    <img src="images/チケット切り取り図1.png" alt="チケット切り取り図" class="img-full img-zoom" loading="lazy">
   </div>
   </details>
 </div>
@@ -1131,7 +1131,7 @@ footer {
 
     <h3 style="margin:16px 0 8px;font-size:14px;color:var(--primary)">人員配置（駐車場・誘導）</h3>
     <div class="box box-info" style="font-size:13px;margin-bottom:10px">
-      ハザードランプ点灯・時速15km以下徐行を徹底。公園内は<strong>右回り</strong>。
+      ハザードランプ点灯・時速15km以下徐行を徹底。公園内は<b>右回り</b>。
     </div>
 
     <div class="pl">
@@ -1183,8 +1183,8 @@ footer {
       2025年開催分のレイアウト・駐車場配置を仮に当て込んだものです。2026年の情報が確定次第、更新します。
     </div>
     <div class="box box-info" style="font-size:13px;margin-bottom:12px">
-      出店者駐車場 → <strong>西駐車場</strong>（満車時は北側駐車場へ）<br>
-      スタッフ駐車場 → <strong>きらり横</strong><br>
+      出店者駐車場 → <b>西駐車場</b>（満車時は北側駐車場へ）<br>
+      スタッフ駐車場 → <b>きらり横</b><br>
       警備員配置 → 8:00〜17:30（休憩含）
     </div>
 
@@ -1202,11 +1202,9 @@ footer {
       </table>
     </div>
 
-    <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">全体レイアウト図</h3>
-    <img src="images/image12.png" alt="全体レイアウト図" class="img-full img-zoom" loading="lazy">
-
     <h3 style="margin:14px 0 6px;font-size:14px;color:var(--primary)">駐車場・警備員配置図</h3>
-    <img src="images/image14.png" alt="駐車場・警備員配置図" class="img-full img-zoom" loading="lazy">
+    <img src="images/image12.png" alt="警備員配置図" class="img-full img-zoom" loading="lazy">
+    <img src="images/北側駐車場（満車時）図1.png" alt="北側駐車場（満車時）図" class="img-full img-zoom" loading="lazy">
 
     <h3 style="margin:10px 0 6px;font-size:13px;color:var(--muted)">補足図</h3>
     <div class="img-grid-3">
