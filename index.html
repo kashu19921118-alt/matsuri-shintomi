@@ -711,6 +711,14 @@ footer {
   transition: background .15s;
 }
 .kaban-dl-btn:hover { background: rgba(27,45,85,.15); }
+.kaban-dl-btn.is-old {
+  background: rgba(0,0,0,.04);
+  color: #8a8a8a;
+  border-style: dashed;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.kaban-dl-btn.is-old:hover { background: rgba(0,0,0,.08); }
 
 /* ===== KABAN TABLE — MOBILE ===== */
 @media (max-width: 600px) {
@@ -1411,7 +1419,13 @@ footer {
       ・「kb-placeholder」クラスの仮データを本番データに差し替え
       ========================================
     -->
-    <a href="kaban.pdf" class="kaban-dl-btn" target="_blank">📄 PDF版 ダウンロード</a>
+    <a href="kaban.pdf" class="kaban-dl-btn is-old" target="_blank">📄 PDF版 ダウンロード（2025年版・旧）</a>
+    <div class="box box-warn" style="margin-bottom:14px">
+      <strong>⚠️ PDF版はまだ2025年のものです</strong>
+      <p>このPDFには <b>⑤プロレス前半戦</b>・<b>⑨紙ヒコーキ飛ばし選手権</b> など<b>2025年の演目</b>が載っています。<br>
+      <b>2026年の進行は、このページの下の表を見てください。</b>印刷して持ち歩く場合もこの画面から印刷をお願いします。<br>
+      2026年版のPDFは、担当者の割り振りが確定し次第このボタンから差し替えます。</p>
+    </div>
     <p class="note" style="margin-bottom:12px">臨機応変に対応すること</p>
 
     <div class="box box-warn" style="margin-bottom:14px">
