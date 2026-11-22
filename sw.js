@@ -1,4 +1,4 @@
-const CACHE = 'matsuri-v6';
+const CACHE = 'matsuri-v7';
 const PRECACHE = ['./', './index.html'];
 
 self.addEventListener('install', e => {
