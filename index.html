@@ -1304,12 +1304,12 @@ footer {
   <details>
   <summary>全体レイアウト &amp; 駐車場配置</summary>
   <div class="det">
-    <h3 style="margin:0 0 6px;font-size:14px;color:var(--primary)">全体レイアウト図（2026年版・図13）</h3>
+    <h3 style="margin:0 0 6px;font-size:14px;color:var(--primary)">全体レイアウト図（2026年版・図13拡大／11月21日）</h3>
     <img src="images/layout2026.png" alt="まつりしんとみ2026 全体レイアウト図" class="img-full img-zoom" loading="lazy">
     <div class="box box-info" style="font-size:13px;margin:8px 0 12px">
-      キッチンカー <b>18区画</b>／飲食店エリア <b>52区画</b>／雑貨エリア <b>21区画</b><br>
+      キッチンカー <b>19区画</b>（K19を追加）／飲食店エリア <b>52区画</b>／雑貨エリア <b>21区画</b><br>
       <span style="color:var(--blue)">●</span>青丸＝D-1グランプリ参加店　<span style="color:var(--red)">●</span>赤丸＝謎解きパネル<br>
-      <a href="layout2026.pdf" target="_blank" rel="noopener">▶ 原図PDF（レイアウト図＋出店者場所一覧）を開く</a>
+      <a href="layout2026.pdf" target="_blank" rel="noopener">▶ レイアウト図PDF（11月21日）</a>　<a href="vendors2026.pdf" target="_blank" rel="noopener">▶ 出店者場所一覧PDF（11月16日）</a>
     </div>
 
     <div class="draft-notice">
@@ -2027,9 +2027,9 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
   function getTarget(){
     var now = new Date();
     var yr = now.getFullYear();
-    var t = new Date(yr, 10, 23, 0, 0, 0); // Nov 23
+    var t = new Date(yr, 10, 23, 9, 0, 0); // Nov 23 9:00 開始
     // If today is already past Nov 23, aim for next year
-    if(now >= new Date(yr, 10, 24, 0, 0, 0)) t = new Date(yr + 1, 10, 23, 0, 0, 0);
+    if(now >= new Date(yr, 10, 24, 0, 0, 0)) t = new Date(yr + 1, 10, 23, 9, 0, 0);
     return t;
   }
 
@@ -2043,7 +2043,7 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
     var todayKey = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
     var eventKey = target.getFullYear() * 10000 + (target.getMonth() + 1) * 100 + target.getDate();
 
-    if(todayKey === eventKey){
+    if(todayKey === eventKey && now >= target){
       bar.innerHTML = '🎉 <strong>本日開催！</strong> まつりしんとみ当日です';
       bar.classList.add('event-day');
       clearInterval(interval);
@@ -2052,6 +2052,7 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
 
     var diff = target - now;
     if(diff <= 0){ bar.innerHTML = ''; clearInterval(interval); return; }
+    var lbl = (todayKey === eventKey) ? '開始まで' : '開催まで';
 
     var d = Math.floor(diff / 86400000);
     var h = Math.floor((diff % 86400000) / 3600000);
@@ -2063,7 +2064,7 @@ window.addEventListener('resize', syncHeaderPad, {passive: true});
     } else if(d >= 1){
       bar.innerHTML = '🗓 開催まで <strong>' + d + '日 ' + h + '時間</strong>';
     } else {
-      bar.innerHTML = '⏰ 開催まで <strong>' + h + '時間 ' + pad(m) + '分 ' + pad(s) + '秒</strong>';
+      bar.innerHTML = '⏰ ' + lbl + ' <strong>' + h + '時間 ' + pad(m) + '分 ' + pad(s) + '秒</strong>';
     }
   }
 
